@@ -1,0 +1,193 @@
+@use './components/Info/info';
+@use './content/commonui/commonui';
+@use './content/LandingPage/landing-page';
+@use './content/Dashboard/repo-page';
+@use './content/support/support';
+@use './content/BenchmarkLogs/benchmark';
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+@use '@carbon/react/scss/colors';
+
+html,
+body {
+  height: 100%;
+}
+
+.app .cds--content {
+  margin-top: 3rem;
+  height: 100%;
+  padding-bottom: $spacing-10;
+}
+
+.app .common-heading {
+  padding-bottom: $spacing-05;
+}
+
+.app .validity-text {
+  padding-bottom: 0px;
+}
+
+.validity-notify {
+  margin-top: $spacing-04;
+  width: 100%;
+}
+
+.theme-padding-size {
+  padding: $spacing-06;
+}
+
+.charts-common-cont {
+  margin-top: $spacing-06;
+  margin-bottom: $spacing-02;
+}
+
+.charts-common-cont .title {
+  width: 100%;
+}
+
+.charts-common-cont .toolbar {
+  justify-content: flex-end;
+  width: auto;
+}
+
+// body{
+//   background-color: var(--cds-text-primary, #161616);
+// }
+
+@include breakpoint-between(sm, md) {
+  .cds--cc--title p.title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+}
+
+.notification-ui {
+  position: fixed;
+  right: $spacing-06;
+  top: 3rem;
+  z-index: 999;
+}
+
+.login-container {
+  height: 100%;
+
+  .cds--grid {
+    height: 100%;
+  }
+
+  .cds--row {
+    height: 100%;
+  }
+
+  .login-col-container {
+    display: flex;
+  }
+
+  .login-left-content {
+    p {
+      margin-bottom: $spacing-04;
+      font-size: var(--cds-body-compact-03-font-size, 2.625rem);
+    }
+
+    h3 {
+      margin-bottom: $spacing-04;
+      font-size: var(--cds-heading-03-font-size, 5rem);
+    }
+
+    h2 {
+      margin-bottom: $spacing-04;
+      font-size: var(--cds-heading-03-font-size, 5rem);
+    }
+  }
+
+  .login-subcontainer {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .login-form-cont {
+      width: 100%;
+
+      h3 {
+        padding-top: $spacing-04;
+        padding-bottom: $spacing-05;
+
+        span.title-bold {
+          font-weight: var(--cds-heading-03-font-weight, 600);
+        }
+      }
+
+      .login-footer {
+        padding-top: $spacing-05;
+        padding-bottom: $spacing-05;
+
+        p {
+          font-size: var(--cds-label-01-font-size, 0.75rem);
+          margin-bottom: $spacing-03;
+        }
+      }
+    }
+
+    .cds--form {
+      width: 100%;
+
+      .cds--fieldset {
+        padding-bottom: $spacing-05;
+      }
+    }
+  }
+}
+
+/* Adjust styling for mobile */
+
+@include breakpoint(sm) {
+  .cds--cc--title p.title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .login-container {
+    .login-subcontainer {
+      height: auto;
+    }
+  }
+}
+
+.buttons-ui-cont .cds--btn-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+.buttons-ui-cont .cds--btn-set .cds--btn {
+  flex: 1 1 calc(50% - $spacing-03);
+  max-width: calc(50% - $spacing-03);
+  margin-bottom: 0;
+  margin-top: 0px;
+}
+.buttons-ui-cont .cds--btn-set .cds--btn:nth-child(2n) {
+  margin-right: 0;
+}
+.buttons-ui-cont .cds--btn-set .cds--btn:nth-child(3) {
+  flex: 1 1 calc(50% - $spacing-03);
+  max-width: calc(50% - $spacing-03);
+}
+.install-progress{
+  color: var(--cds-support-info);
+}
+.error-notification{
+  margin-bottom: $spacing-05;
+}
+.hide-notification .notification-ui{
+  display: none;
+}
+.session-modal .cds--modal-close-button{
+  display: none;
+}

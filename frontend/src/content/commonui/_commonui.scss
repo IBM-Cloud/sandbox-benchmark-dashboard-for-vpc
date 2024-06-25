@@ -1,0 +1,65 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+@media (prefers-color-scheme: light) {
+    .sidenav-theme,.sidenav-theme .cds--side-nav {
+      background: var(--cds-layer-01);
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .sidenav-theme,.sidenav-theme .cds--side-nav {
+      background: var(--cds-background);
+    }
+  }
+@media (min-width: 66rem) {
+    .content {
+        margin-left: 16rem;
+    }
+}
+.header-right-profile{
+    height: fit-content;
+}
+.nav-top-list .cds--side-nav__link-text{
+    display: flex;
+    flex-direction: column;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+a:focus{
+    outline: 0px;
+}
+a.cds--header__name,a.cds--header__name:focus{
+    border: 0px;
+}
+.right-header-gbl .cds--btn--primary{
+    padding-block-start: 0;
+    background-color: transparent;
+}
+.right-header-gbl .cds--btn--primary:hover{
+    background-color: var(--cds-background-hover, rgba(141, 141, 141, 0.12));
+}
+.sandbox-sidebar .nav-top-list .cds--side-nav__link-text{
+    white-space: inherit;
+}
+.right-header-gbl {
+    .cds--overflow-menu__wrapper {
+        .cds--popover-container,
+        .cds--tooltip-trigger__wrapper {
+            height: 100%;
+        }
+    }
+    .custom-profile-menu {
+        height: 100%;
+        inline-size: 3rem;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+    .cds--overflow-menu.cds--overflow-menu--open.custom-profile-menu {
+        box-shadow: none;
+    }
+}

@@ -1,0 +1,19 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+.repo-page__r1 {
+  padding-top: $spacing-05;
+  padding-bottom: $spacing-05;
+}
+@media (prefers-color-scheme: light) {
+  .theme-padding-size{
+    background: var(--cds-layer-01);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .theme-padding-size {
+    background: var(--cds-layer);
+  }
+}

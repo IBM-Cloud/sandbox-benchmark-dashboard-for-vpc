@@ -1,0 +1,39 @@
+@use '@carbon/react/scss/spacing' as *;
+@use '@carbon/react/scss/type' as *;
+@use '@carbon/react/scss/breakpoint' as *;
+@use '@carbon/react/scss/theme' as *;
+
+  @media (prefers-color-scheme: light) {
+    .support-theme {
+      background: var(--cds-layer-01);
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    .support-theme {
+      background: var(--cds-layer);
+    }
+  }
+.support-page__r1 {
+  padding: 0px;
+}
+.support-theme{
+  padding: $spacing-05;
+  p{
+    margin-bottom: $spacing-04;
+    margin-top: $spacing-04;
+    font-size: var(--cds-body-long-01-font-size,.875rem);
+    line-height: var(--cds-body-long-01-line-height,1.42857);
+    letter-spacing: var(--cds-body-long-01-letter-spacing,.16px);
+  }
+}
+.support-list{
+  list-style: auto;
+  padding-left: 30px;
+  margin-top: $spacing-04;
+}
+.support-list li{
+  padding-bottom: $spacing-04;
+  font-size: var(--cds-body-long-01-font-size,.875rem);
+  line-height: var(--cds-body-long-01-line-height,1.42857);
+  letter-spacing: var(--cds-body-long-01-letter-spacing,.16px);
+}

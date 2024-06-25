@@ -1,0 +1,21 @@
+@use '@carbon/react/scss/spacing' as *;
+
+.landing-page__r2 .cds--tabs--scrollable {
+  transform: translateZ(0);
+  justify-content: flex-end;
+}
+
+.landing-page__r2 .cds--tab-content {
+  padding: 0;
+}
+
+.cds--tabs .cds--tab--overflow-nav-button {
+  padding-right: $spacing-05;
+  z-index: 999;
+  padding-left: $spacing-05;
+}
+
+.cds--subgrid--wide {
+  //fix needed to keep the subgrid from scrolling horizontally
+  margin-right: 1rem;
+}

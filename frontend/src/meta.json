@@ -1,0 +1,118 @@
+{
+	"code": 200,
+	"data": {
+		"availability_policy": {
+			"host_failure": "restart"
+		},
+		"bandwidth": 8000,
+		"boot_volume_attachment": {
+			"device": {
+				"id": "0727-9544637c-e34b-4c01-966f-73f9a5010c27-54tnq"
+			},
+			"id": "0727-9544637c-e34b-4c01-966f-73f9a5010c27",
+			"name": "rebate-grapple-jazz-elevator",
+			"volume": {
+				"crn": "crn:v1:bluemix:public:is:us-south-2:a/19066a3fe4ca466a810f7278fc902dc9::volume:r006-bd40ed3e-8dd4-4274-a28b-e614e091bedd",
+				"id": "r006-bd40ed3e-8dd4-4274-a28b-e614e091bedd",
+				"name": "test-profile-boot-1700806156000"
+			}
+		},
+		"created_at": "2023-11-24T06:10:31.000Z",
+		"crn": "crn:v1:bluemix:public:is:us-south-2:a/19066a3fe4ca466a810f7278fc902dc9::instance:0727_a968f2e2-dbf8-4e09-9a76-67e3fb48a0c0",
+		"disks": [
+			{
+				"created_at": "2023-11-24T06:10:31.000Z",
+				"id": "0727-8ae29bfa-8d89-4a1a-ac29-f45aba146fd9",
+				"interface_type": "virtio_blk",
+				"name": "chateau-cabin-divining-armrest",
+				"resource_type": "instance_disk",
+				"size": 150
+			}
+		],
+		"id": "0727_a968f2e2-dbf8-4e09-9a76-67e3fb48a0c0",
+		"image": {
+			"crn": "crn:v1:bluemix:public:is:us-south:a/811f8abfbd32425597dc7ba40da98fa6::image:r006-fedc50ed-8ea3-4a66-9559-c482c4e6ed88",
+			"id": "r006-fedc50ed-8ea3-4a66-9559-c482c4e6ed88",
+			"name": "ibm-ubuntu-22-04-3-minimal-amd64-1"
+		},
+		"lifecycle_reasons": [],
+		"lifecycle_state": "stable",
+		"memory": 16,
+		"metadata_service": {
+			"enabled": true,
+			"protocol": "http",
+			"response_hop_limit": 2
+		},
+		"name": "test-profile",
+		"network_attachments": [],
+		"network_interfaces": [
+			{
+				"id": "0727-7c217956-66c2-41e1-aae5-f370d32da351",
+				"name": "eth0",
+				"primary_ipv4_address": "10.240.64.154",
+				"resource_type": "network_interface",
+				"subnet": {
+					"crn": "crn:v1:bluemix:public:is:us-south-2:a/19066a3fe4ca466a810f7278fc902dc9::subnet:0727-dc51597e-8cb3-44ed-814e-70104663af3e",
+					"id": "0727-dc51597e-8cb3-44ed-814e-70104663af3e",
+					"name": "sn-20230927-02",
+					"resource_type": "subnet"
+				}
+			}
+		],
+		"primary_network_interface": {
+			"id": "0727-7c217956-66c2-41e1-aae5-f370d32da351",
+			"name": "eth0",
+			"primary_ipv4_address": "10.240.64.154",
+			"resource_type": "network_interface",
+			"subnet": {
+				"crn": "crn:v1:bluemix:public:is:us-south-2:a/19066a3fe4ca466a810f7278fc902dc9::subnet:0727-dc51597e-8cb3-44ed-814e-70104663af3e",
+				"id": "0727-dc51597e-8cb3-44ed-814e-70104663af3e",
+				"name": "sn-20230927-02",
+				"resource_type": "subnet"
+			}
+		},
+		"profile": {
+			"name": "bx2d-4x16"
+		},
+		"resource_group": {
+			"id": "074886eeefd04d6db557cebcbe3d6797",
+			"name": "infobell-yolanda"
+		},
+		"resource_type": "instance",
+		"startable": true,
+		"status": "running",
+		"status_reasons": [],
+		"total_network_bandwidth": 6000,
+		"total_volume_bandwidth": 2000,
+		"vcpu": {
+			"architecture": "amd64",
+			"count": 4,
+			"manufacturer": "Intel"
+		},
+		"volume_attachments": [
+			{
+				"device": {
+					"id": "0727-9544637c-e34b-4c01-966f-73f9a5010c27-54tnq"
+				},
+				"id": "0727-9544637c-e34b-4c01-966f-73f9a5010c27",
+				"name": "rebate-grapple-jazz-elevator",
+				"volume": {
+					"crn": "crn:v1:bluemix:public:is:us-south-2:a/19066a3fe4ca466a810f7278fc902dc9::volume:r006-bd40ed3e-8dd4-4274-a28b-e614e091bedd",
+					"id": "r006-bd40ed3e-8dd4-4274-a28b-e614e091bedd",
+					"name": "test-profile-boot-1700806156000"
+				}
+			}
+		],
+		"vpc": {
+			"crn": "crn:v1:bluemix:public:is:us-south:a/19066a3fe4ca466a810f7278fc902dc9::vpc:r006-75af8ced-faf4-4f01-a3de-fa9855eceea3",
+			"id": "r006-75af8ced-faf4-4f01-a3de-fa9855eceea3",
+			"name": "testvpc",
+			"resource_type": "vpc"
+		},
+		"zone": {
+			"name": "us-south-2"
+		}
+	},
+	"message": "Meta Data fetched successfully ",
+	"success": true
+}

@@ -1,0 +1,22 @@
+@use '@carbon/react/scss/spacing' as *;
+
+.benchmark-page__r1 {
+  padding-top: $spacing-05;
+  padding-bottom: $spacing-05;
+}
+.search-bar-cont{
+  width: 100%;
+}
+.toolbar{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.toolbar Button{
+  padding: $spacing-04;
+  margin: 0 $spacing-02;
+  border: 0px;
+  cursor: pointer;
+}

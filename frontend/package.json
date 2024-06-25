@@ -1,0 +1,66 @@
+{
+  "name": "ibm-cloud-sandbox",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@carbon/charts-react": "^1.13.30",
+    "@carbon/ibm-products": "^2.17.1",
+    "@carbon/react": "^1.39.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.2",
+    "i18next": "^23.8.1",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "i18next-http-backend": "^2.4.2",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^14.0.1",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "^5.0.1",
+    "sass": "^1.69.3",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "test:coverage": "jest --coverage"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "overrides": {
+    "svgo": "^3.2.0",
+    "nth-check": "^2.1.1",
+    "postcss": "^8.4.35",
+    "follow-redirects": "^1.15.6"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-react": "^7.24.1",
+    "@testing-library/react": "^14.2.2",
+    "babel-jest": "^29.7.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.5.1",
+    "jsdom": "^24.0.0"
+  }
+}
