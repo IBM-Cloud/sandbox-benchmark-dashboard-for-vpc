@@ -26,7 +26,7 @@ const (
 	PrestoCategory  = "Database Application"
 	Presto          = "Presto TPC-H Benchmark"
 
-	ApplicationImage = "ibm-ubuntu-22-04-3-minimal-amd64-2"
+	ApplicationImage = "ibm-ubuntu-22-04-4-minimal-amd64-3"
 
 	SSHUsername = "ubuntu"
 	Port        = "22"
