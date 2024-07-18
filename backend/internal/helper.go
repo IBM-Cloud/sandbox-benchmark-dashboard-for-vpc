@@ -868,6 +868,25 @@ func InsertPrestoBenchmarkData(db *sql.DB, dir string, keyPairName string, confi
 
 //--------------------functions used for instance and benchmark------------------------------
 
+func GetSSHKeyID(vpcService *vpcv1.VpcV1, keyName string) (string, error) {
+	// List all SSH keys
+	listKeysOptions := vpcService.NewListKeysOptions()
+	keys, _, err := vpcService.ListKeys(listKeysOptions)
+	if err != nil {
+		log.Printf("error listing keys: %s", err)
+		return "", fmt.Errorf("error listing keys: %s", err)
+	}
+
+	// Iterate through the keys to find the one with the given name
+	for _, key := range keys.Keys {
+		if *key.Name == keyName {
+			return *key.ID, nil
+		}
+	}
+	log.Printf("SSH key with name %s not found", keyName)
+	return "", fmt.Errorf("SSH key with name %s not found", keyName)
+}
+
 func CreateInstance(db *sql.DB, vpcService *vpcv1.VpcV1, appType string, apiName string, instProfilename8CPU []string, instProfilename16CPU []string, installerPath string, application string, req InstanceRequest) (string, error) {
 	log.Printf("Creating Instance for %s", application)
 	var appName, instanceProfileName []string
@@ -936,7 +955,26 @@ func CreateInstance(db *sql.DB, vpcService *vpcv1.VpcV1, appType string, apiName
 		zone := req.Zone
 		resourcegroup := req.Resourcegroup
 
+		ibmSshKeyName := os.Getenv(IbmSshKeyName)
+		var keys []vpcv1.KeyIdentityIntf
+
 		keyIDentityModel := &vpcv1.KeyIdentityByID{ID: keyID}
+		keys = append(keys, keyIDentityModel)
+		if ibmSshKeyName != "" {
+			ibmSshKeyId, err := GetSSHKeyID(vpcService, ibmSshKeyName)
+			if err != nil {
+				log.Println("Error fetching key ID:", err)
+				DeleteKeyFile(keyName) //deletes the ssh key created for the vsi above
+				DeleteKey(*keyID, vpcService)
+				ResetFlag(db, apiName)
+				return "", fmt.Errorf("error fetching key ID: %s", err)
+			}
+			IbmKeyIdModel := &vpcv1.KeyIdentityByID{ID: &ibmSshKeyId}
+			keys = append(keys, IbmKeyIdModel)
+		} else {
+			log.Println("environment variable IBM_SSHKEY_NAME not set")
+		}
+
 		instanceProfileIdentityModel := &vpcv1.InstanceProfileIdentityByName{Name: &instanceProfileName[i]}
 		vpcIDentityModel := &vpcv1.VPCIdentityByID{ID: &vpcID}
 		imageIDentityModel := &vpcv1.ImageIdentityByID{ID: &imageID}
@@ -946,7 +984,7 @@ func CreateInstance(db *sql.DB, vpcService *vpcv1.VpcV1, appType string, apiName
 
 		// Create instance
 		instancePrototypeModel := &vpcv1.InstancePrototypeInstanceByImage{
-			Keys:                    []vpcv1.KeyIdentityIntf{keyIDentityModel},
+			Keys:                    keys,
 			Name:                    core.StringPtr(appName[i]),
 			Profile:                 instanceProfileIdentityModel,
 			VPC:                     vpcIDentityModel,

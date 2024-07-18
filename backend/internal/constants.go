@@ -70,6 +70,7 @@ var (
 	APIPort    = "API_PORT" // Port to host backend
 
 	IAMTrustedProfileIDEnv = "IAM_TRUSTED_PROFILEID"
+	IbmSshKeyName          = "IBM_SSHKEY_NAME"
 	NetworkInterfaceName   = "eth0"
 
 	InstanceIdentityTokenURL = "http://169.254.169.254/instance_identity/v1/token?version=2024-03-01"
