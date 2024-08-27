@@ -17,9 +17,24 @@ virtualenv /home/ubuntu/inference_env
 . /home/ubuntu/inference_env/bin/activate
 
 # Installing Pytorch and transformers
-pip3 install torch -f https://download.pytorch.org/whl/cpu
-pip3 install intel_extension_for_pytorch -f https://developer.intel.com/ipex-whl-stable-cpu
-pip3 install transformers
+pip3 install torch==2.3.1 -f https://download.pytorch.org/whl/cpu
+pip3 install intel_extension_for_pytorch==2.3.0 -f https://developer.intel.com/ipex-whl-stable-cpu
+# Creating & locking requirements.txt for pip3 versions
+cat <<'EOF' > requirements.txt
+certifi==2024.7.4
+charset-normalizer==3.3.2
+huggingface-hub==0.24.5
+idna==3.7
+PyYAML==6.0.2
+regex==2024.7.24
+requests==2.32.3
+safetensors==0.4.4
+tokenizers==0.19.1
+tqdm==4.66.5
+transformers==4.44.0
+urllib3==2.2.2
+EOF
+pip3 install -r requirements.txt
 
 lscpu | grep Cascadelake
 if [ $? -eq 0 ]; then
@@ -66,8 +81,40 @@ fi
 lscpu | grep SapphireRapids
 if [ $? -eq 0 ]; then
 
-# Installing Intel Optimum library
-pip3 install optimum[intel]
+# Creating & locking requirements.txt for pip3 versions(Intel Optimum library)
+cat <<'EOF' > requirements.txt
+aiohappyeyeballs==2.3.5
+aiohttp==3.10.3
+aiosignal==1.3.1
+async-timeout==4.0.3
+attrs==24.2.0
+coloredlogs==15.0.1
+datasets==2.20.0
+dill==0.3.8
+frozenlist==1.4.1
+fsspec==2024.5.0
+humanfriendly==10.0
+multidict==6.0.5
+multiprocess==0.70.16
+numpy==1.26.4
+onnx==1.16.2
+optimum==1.21.3
+optimum-intel==1.18.2
+pandas==2.2.2
+protobuf==5.27.3
+pyarrow==17.0.0
+pyarrow-hotfix==0.6
+python-dateutil==2.9.0.post0
+pytz==2024.1
+scipy==1.14.0
+sentencepiece==0.2.0
+six==1.16.0
+transformers==4.43.4
+tzdata==2024.1
+xxhash==3.4.1
+yarl==1.9.4
+EOF
+pip3 install -r requirements.txt
 
 # This script benchmarks the Bert-based and Roberta-based inference models on a text classification task.
 # It is based on popular Huggingface transformers implemented with PYTorch
