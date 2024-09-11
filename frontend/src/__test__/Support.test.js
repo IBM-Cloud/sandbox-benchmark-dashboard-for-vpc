@@ -36,9 +36,9 @@ describe('Supportpage Component', () => {
 
   it('displays valid support link', () => {
     render(<Supportpage />);
-    const supportLinks = screen.getAllByRole('link', { name: /https:\/\/github.com\/IBM-Cloud\/sandbox-benchmark-for-vpc\/issues/ });
+    const supportLinks = screen.getAllByRole('link', { name: /https:\/\/github.ibm.com\/workload-eng-services\/sandbox\/issues/ });
     supportLinks.forEach((link) => {
-      expect(link).toHaveAttribute('href', 'https://github.com/IBM-Cloud/sandbox-benchmark-for-vpc/issues');
+      expect(link).toHaveAttribute('href', 'https://github.ibm.com/workload-eng-services/sandbox/issues');
     });
   });
 });
