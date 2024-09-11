@@ -8,7 +8,7 @@ PRIVATE_REPO_URL="https://${GITHUB_TOKEN}@github.ibm.com/workload-eng-services/s
 PUBLIC_REPO_URL="https://${GIT_USER_NAME}:${GITHUB_TOKEN1}@github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc.git"
 PRIVATE_REPO_PATH="/workspace/private"
 PUBLIC_REPO_PATH="/workspace/public"
-BRANCH_NAME="subrepo"
+BRANCH_NAME="${Branch}"
 
 # Function to check if a command was successful
 check_command() {
