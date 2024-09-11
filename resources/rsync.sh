@@ -4,7 +4,7 @@ git config --global user.email "gaurav.aggarval9@ibm.com"
 git config --global user.name "gaurav-ibm-sa"
 
 # Configuration
-PRIVATE_REPO_HTTPS="https://github.ibm.com/workload-eng-services/sandbox-ui.git"
+PRIVATE_REPO_URL="https://${GITHUB_TOKEN}@github.ibm.com/workload-eng-services/sandbox-ui.git"
 PUBLIC_REPO_URL="https://gaurav-ibm-sa:${GITHUB_TOKEN1}@github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc.git"
 PRIVATE_REPO_PATH="/workspace/private"
 PUBLIC_REPO_PATH="/workspace/public"
@@ -18,55 +18,55 @@ check_command() {
     fi
 }
 
-# Diagnostic function
-run_diagnostics() {
-    echo "Running diagnostics..."
-    echo "Checking SSH_PRIVATE_KEY environment variable:"
-    if [ -z "$SSH_PRIVATE_KEY" ]; then
-        echo "SSH_PRIVATE_KEY is not set"
-    else
-        echo "SSH_PRIVATE_KEY is set (value not shown for security)"
-    fi
-    echo "Checking GITHUB_TOKEN environment variable:"
-    if [ -z "$GITHUB_TOKEN" ]; then
-        echo "GITHUB_TOKEN is not set"
-    else
-        echo "GITHUB_TOKEN is set (value not shown for security)"
-    fi
-    echo "Git version:"
-    git --version
-    echo "Current user:"
-    whoami
-}
+# # Diagnostic function
+# run_diagnostics() {
+#     echo "Running diagnostics..."
+#     echo "Checking SSH_PRIVATE_KEY environment variable:"
+#     if [ -z "$SSH_PRIVATE_KEY" ]; then
+#         echo "SSH_PRIVATE_KEY is not set"
+#     else
+#         echo "SSH_PRIVATE_KEY is set (value not shown for security)"
+#     fi
+#     echo "Checking GITHUB_TOKEN environment variable:"
+#     if [ -z "$GITHUB_TOKEN" ]; then
+#         echo "GITHUB_TOKEN is not set"
+#     else
+#         echo "GITHUB_TOKEN is set (value not shown for security)"
+#     fi
+#     echo "Git version:"
+#     git --version
+#     echo "Current user:"
+#     whoami
+# }
 
-# Set up SSH key from environment variable
-setup_ssh_key() {
-    if [ -n "$SSH_PRIVATE_KEY" ]; then
-        echo "Setting up SSH key..."
-        mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        eval $(ssh-agent -s)
-        ssh-add ~/.ssh/id_rsa
-        return 0
-    else
-        echo "SSH_PRIVATE_KEY not set, falling back to HTTPS"
-        return 1
-    fi
-}
+# # Set up SSH key from environment variable
+# setup_ssh_key() {
+#     if [ -n "$SSH_PRIVATE_KEY" ]; then
+#         echo "Setting up SSH key..."
+#         mkdir -p ~/.ssh
+#         echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+#         chmod 600 ~/.ssh/id_rsa
+#         eval $(ssh-agent -s)
+#         ssh-add ~/.ssh/id_rsa
+#         return 0
+#     else
+#         echo "SSH_PRIVATE_KEY not set, falling back to HTTPS"
+#         return 1
+#     fi
+# }
 
-# Run diagnostics
-run_diagnostics
+# # Run diagnostics
+# run_diagnostics
 
-# Determine which authentication method to use
-if setup_ssh_key; then
-    PRIVATE_REPO_URL="$PRIVATE_REPO_SSH"
-elif [ -n "$GITHUB_TOKEN" ]; then
-    PRIVATE_REPO_URL="https://${GITHUB_TOKEN}@github.ibm.com/workload-eng-services/sandbox-ui.git"
-else
-    echo "Error: Neither SSH_PRIVATE_KEY nor GITHUB_TOKEN is set. Cannot authenticate."
-    exit 1
-fi
+# # Determine which authentication method to use
+# if setup_ssh_key; then
+#     PRIVATE_REPO_URL="$PRIVATE_REPO_SSH"
+# elif [ -n "$GITHUB_TOKEN" ]; then
+#     PRIVATE_REPO_URL="https://${GITHUB_TOKEN}@github.ibm.com/workload-eng-services/sandbox-ui.git"
+# else
+#     echo "Error: Neither SSH_PRIVATE_KEY nor GITHUB_TOKEN is set. Cannot authenticate."
+#     exit 1
+# fi
 
 # Ensure the repository paths exist
 mkdir -p "$PRIVATE_REPO_PATH"
@@ -118,3 +118,7 @@ git push origin $BRANCH_NAME
 check_command "Failed to push changes to public repo"
 
 echo "Changes successfully synced from private to public repo!"
+
+echo "Cleaning up private repository directory..."
+rm -rf "$PRIVATE_REPO_PATH"
+rm -rf "$PUBLIC_REPO_PATH"
