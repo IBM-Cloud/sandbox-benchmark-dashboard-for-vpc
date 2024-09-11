@@ -1,11 +1,11 @@
 #!/bin/bash
 
-git config --global user.email "gaurav.aggarval9@ibm.com"
-git config --global user.name "gaurav-ibm-sa"
+git config --global user.email "$GIT_USER_EMAIL"
+git config --global user.name "$GIT_USER_NAME"
 
 # Configuration
 PRIVATE_REPO_URL="https://${GITHUB_TOKEN}@github.ibm.com/workload-eng-services/sandbox-ui.git"
-PUBLIC_REPO_URL="https://gaurav-ibm-sa:${GITHUB_TOKEN1}@github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc.git"
+PUBLIC_REPO_URL="https://${GIT_USER_NAME}:${GITHUB_TOKEN1}@github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc.git"
 PRIVATE_REPO_PATH="/workspace/private"
 PUBLIC_REPO_PATH="/workspace/public"
 BRANCH_NAME="subrepo"
