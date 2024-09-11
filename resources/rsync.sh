@@ -1,12 +1,9 @@
 #!/bin/bash
 
-echo "Current working directory: $(pwd)"
-
-  git config --global user.email "gaurav.aggarval9@ibm.com"
-  git config --global user.name "gaurav-ibm-sa"
+git config --global user.email "gaurav.aggarval9@ibm.com"
+git config --global user.name "gaurav-ibm-sa"
 
 # Configuration
-PRIVATE_REPO_SSH="git@github.ibm.com:workload-eng-services/sandbox-ui.git"
 PRIVATE_REPO_HTTPS="https://github.ibm.com/workload-eng-services/sandbox-ui.git"
 PUBLIC_REPO_URL="https://gaurav-ibm-sa:${GITHUB_TOKEN1}@github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc.git"
 PRIVATE_REPO_PATH="/workspace/private"
