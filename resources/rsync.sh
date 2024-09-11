@@ -67,6 +67,24 @@ check_command "Failed to commit changes to public repo"
 git push origin $BRANCH_NAME
 check_command "Failed to push changes to public repo"
 
+# Create a pull request on GitHub
+PR_TITLE="Sync changes from ${BRANCH_NAME} to ${MAIN_BRANCH}"
+PR_BODY="This pull request syncs changes from branch ${BRANCH_NAME} to the main branch."
+PR_URL="https://api.github.com/repos/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc/pulls"
+
+echo "Creating pull request..."
+curl -X POST "$PR_URL" \
+    -H "Authorization: token $GITHUB_TOKEN1" \
+    -H "Accept: application/vnd.github.v3+json" \
+    -d @- <<EOF
+{
+  "title": "$PR_TITLE",
+  "body": "$PR_BODY",
+  "head": "$BRANCH_NAME",
+  "base": "$MAIN_BRANCH"
+}
+EOF
+
 echo "Changes successfully synced from private to public repo!"
 
 echo "Cleaning up private repository directory..."
