@@ -29,7 +29,7 @@ const Supportpage = () => {
           <p>{t('support.exploreContent')}</p>
           <h5>{t('support.supportHeading')}</h5>
           <p>
-            {t('support.supportList1')} <a href="https://github.com/IBM-Cloud/sandbox-benchmark-for-vpc/issues" target="blank">https://github.com/IBM-Cloud/sandbox-benchmark-for-vpc/issues</a>. <span>{t('support.supportList2')}</span>
+            {t('support.supportList1')} <a href="https://github.ibm.com/workload-eng-services/sandbox/issues" target="blank">https://github.ibm.com/workload-eng-services/sandbox/issues</a>. <span>{t('support.supportList2')}</span>
           </p>
           <p>{t('support.supportList3')}</p>
         </Theme>

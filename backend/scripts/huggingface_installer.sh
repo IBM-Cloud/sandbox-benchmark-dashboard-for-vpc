@@ -17,8 +17,9 @@ virtualenv /home/ubuntu/inference_env
 . /home/ubuntu/inference_env/bin/activate
 
 # Installing Pytorch and transformers
-pip3 install torch==2.3.1 -f https://download.pytorch.org/whl/cpu
+pip3 install torch==2.3.1 -f https://download.pytorch.org/whl/cpu 
 pip3 install intel_extension_for_pytorch==2.3.0 -f https://developer.intel.com/ipex-whl-stable-cpu
+
 # Creating & locking requirements.txt for pip3 versions
 cat <<'EOF' > requirements.txt
 certifi==2024.7.4
