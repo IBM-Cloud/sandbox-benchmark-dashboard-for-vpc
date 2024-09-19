@@ -20,7 +20,7 @@ import {
 } from "@carbon/react";
 import { Download, Renew } from "@carbon/react/icons";
 import { getInstanceStatus, getBenchmarkRunLogs, downloadLogsApi } from "../api/api";
-import Notification from "../component/toast";
+import { useNotification } from "../component/NotificationManager";
 import { useTranslation } from "react-i18next";
 
 const ConfigurationDetails = () => {
@@ -32,10 +32,6 @@ const ConfigurationDetails = () => {
   const [pageValue, setPageValue] = useState(1);
   const [pageSizeValue, setPageSizeValue] = useState(10);
   const [searchTexts, setSearchTexts] = useState("");
-  const [showAppStatus, setShowAppStatus] = useState("");
-  const [showNotification, setShowNotification] = useState("");
-  const [showNotificationMsg, setShowNotificationMsg] = useState({});
-  const [showToastContainer, setShowToastContainer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const headers = [
@@ -80,22 +76,20 @@ const ConfigurationDetails = () => {
     }
   }
 
+  const addToast = useNotification();
+  
   function showNotificationStatus(statusKind, status, statusText) {
-    if (statusKind !== undefined) {
-      setShowAppStatus(statusKind);
+    if (statusKind && (statusKind === "error" || statusKind === "success")) {
+      addToast({
+        id: status,
+        ariaLabel: statusKind,
+        kind: statusKind,
+        role: "alert",
+        subtitle: statusText,
+        timeout: "",
+        title: (statusKind === "error" ? (t('failed')) : (t('success'))),
+      });
     }
-    if (status !== undefined) {
-      setShowNotification(status);
-    }
-    if (statusText !== undefined) {
-      setShowNotificationMsg(statusText);
-    }
-    if ((statusKind !== undefined && statusKind === "error") || (statusKind !== undefined && statusKind === "success")) {
-      setShowToastContainer(true);
-    }
-  };
-  const resetShowNotification = () => {
-    setShowNotification(false);
   };
 
   const benchmarkLogsList = async (pageNum, searchtxt) => {
@@ -184,11 +178,10 @@ const ConfigurationDetails = () => {
 
   useEffect(() => {
     benchmarkLogsList();
-  }, [showToastContainer]);
+  }, []);
 
   return (
     <>
-      <Notification key={showNotification} role="alert" timeout="" kind={showAppStatus} subtitle={showNotificationMsg} title={t('failed')} showToastContainer={showToastContainer} resetShowNotification={resetShowNotification} />
       <DataTable rows={subLogsList} headers={headers} isSortable>
         {({
           rows,
