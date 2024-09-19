@@ -15,18 +15,14 @@ import {
 } from "@carbon/react";
 import { Renew } from "@carbon/icons-react";
 import { getAllInstances } from "../api/api";
-import Notification from "../component/toast";
 import { useTranslation } from "react-i18next";
+import { useNotification } from "../component/NotificationManager";
 
 const BenchmarkTable = () => {
   const { t } = useTranslation();
   const [instanceDetails, setInstanceDetails] = useState([]);
   const [instanceStatus, setInstanceStatus] = useState({});
   const [isLoading, setisLoading] = useState(false);
-  const [showAppStatus, setShowAppStatus] = useState("");
-  const [showNotification, setShowNotification] = useState("");
-  const [showNotificationMsg, setShowNotificationMsg] = useState({});
-  const [showToastContainer, setShowToastContainer] = useState(false);
 
   const headers = [
     {
@@ -50,24 +46,19 @@ const BenchmarkTable = () => {
       key: "vsiStatus",
     },
   ];
-
+  const addToast = useNotification();
   function showNotificationStatus(statusKind, status, statusText) {
-    if (statusKind !== undefined) {
-      setShowAppStatus(statusKind);
+    if (statusKind && (statusKind === "error" || statusKind === "success")) {
+      addToast({
+        id: status,
+        ariaLabel: statusKind,
+        kind: statusKind,
+        role: "alert",
+        subtitle: statusText,
+        timeout: "",
+        title: (statusKind === "error" ? (t('failed')) : (t('success'))),
+      });
     }
-    if (status !== undefined) {
-      setShowNotification(status);
-    }
-    if (statusText !== undefined) {
-      setShowNotificationMsg(statusText);
-    }
-    if ((statusKind !== undefined && statusKind === "error") || (statusKind !== undefined && statusKind === "success")) {
-      setShowToastContainer(true);
-    }
-  };
-
-  const resetShowNotification = () => {
-    setShowNotification(false);
   };
 
   const getAllInstance = async () => {
@@ -94,10 +85,9 @@ const BenchmarkTable = () => {
 
   useEffect(() => {
     getAllInstance();
-  }, [showToastContainer]);
+  }, []);
   return (
     <>
-      <Notification key={showNotification} role="alert" timeout="" kind={showAppStatus} subtitle={showNotificationMsg} title={t('failed')} showToastContainer={showToastContainer} resetShowNotification={resetShowNotification} />
       <DataTable rows={instanceDetails} headers={headers} isSortable>
         {({
           rows,
@@ -136,7 +126,7 @@ const BenchmarkTable = () => {
                 {instanceStatus && rows !== null && rows !== undefined && rows.map((row, index) => (
                   <TableRow key={index}  {...getRowProps({ row })}>
                     {row.cells.map((cell, cellIndex) => (
-                    <TableCell key={cellIndex}>{cell.value}</TableCell>
+                      <TableCell key={cellIndex}>{cell.value}</TableCell>
                     ))}
                   </TableRow>
                 ))}
