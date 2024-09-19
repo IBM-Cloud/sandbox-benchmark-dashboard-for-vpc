@@ -12,9 +12,9 @@ import HuggingFaceApp from "./huggingFace/hugging";
 import ByoApplication from "./byoApp/byo";
 import PrestoApp from "./presto/presto";
 import { getMetadata, getAllInstances } from "../api/api";
-import Notification from "../component/toast";
 import { useTranslation } from "react-i18next";
 import CommonUIContext from "../component/CommonUIContext";
+import { useNotification } from "../component/NotificationManager";
 
 function LandingPage() {
   const { t } = useTranslation();
@@ -22,13 +22,9 @@ function LandingPage() {
   const [showModal, setShowModal] = useState(false);
   const [hideModalChecked, setHideModalChecked] = useState(false);
   const [metaData, setMetaData] = useState({});
-  const [showAppStatus, setShowAppStatus] = useState("");
-  const [showNotification, setShowNotification] = useState("");
-  const [showNotificationMsg, setShowNotificationMsg] = useState({});
-  const [showErrorLogMsg, setShowErrorLogMsg] = useState("");
-  const [showToastContainer, setShowToastContainer] = useState(false);
 
   const { setByoState } = useContext(CommonUIContext);
+  const addToast = useNotification();
 
   const handleHideModal = () => {
     if (hideModalChecked) {
@@ -72,24 +68,17 @@ function LandingPage() {
   };
 
   function showNotificationStatus(statusKind, status, statusText, errorInfoText) {
-    if (statusKind !== undefined) {
-      setShowAppStatus(statusKind);
+    if (statusKind && (statusKind === "error" || statusKind === "success")) {
+      addToast({
+        id: status,
+        ariaLabel: statusKind,
+        kind: statusKind,
+        role: "alert",
+        subtitle: statusText + (errorInfoText ? ` ${errorInfoText}` : ""),
+        timeout: (statusKind === "error" ? "" : "10000"),
+        title: (statusKind === "error" ? (t('failed')) : (t('success'))),
+      });
     }
-    if (status !== undefined) {
-      setShowNotification(status);
-    }
-    if (statusText !== undefined) {
-      setShowNotificationMsg(statusText);
-    }
-    if (errorInfoText !== undefined) {
-      setShowErrorLogMsg(errorInfoText);
-    }
-    if ((statusKind !== undefined && statusKind === "error") || (statusKind !== undefined && statusKind === "success")) {
-      setShowToastContainer(true);
-    }
-  };
-  const resetShowNotification = () => {
-    setShowNotification(false);
   };
   useEffect(() => {
     const shouldShowMessage = localStorage.getItem("showModal");
@@ -103,8 +92,6 @@ function LandingPage() {
 
   return (
     <>
-      {showAppStatus === "success" && <Notification key={showNotification} timeout={5000} role="status" kind={showAppStatus} subtitle={showNotificationMsg} title={t('success')} showToastContainer={showToastContainer} resetShowNotification={resetShowNotification} />}
-      {showAppStatus === "error" && <Notification key={showNotification} role="alert" timeout="" kind={showAppStatus} subtitle={`${showNotificationMsg} ${showErrorLogMsg}`} title={t('failed')} showToastContainer={showToastContainer} resetShowNotification={resetShowNotification} />}
       <Grid className="landing-page" fullWidth>
         <Column lg={16} md={8} sm={4} className="landing-page-title">
         <InlineNotification title={t('disclaimer')} className="error-notification" subtitle={t('disclaimerMessage')} kind="info" role="status" />

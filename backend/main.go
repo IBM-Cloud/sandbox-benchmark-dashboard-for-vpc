@@ -7,7 +7,7 @@ import (
 	"os/user"
 	"strconv"
 
-	inst "github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc/internal"
+	inst "github.ibm.com/workload-eng-services/sandbox/internal"
 )
 
 func main() {
