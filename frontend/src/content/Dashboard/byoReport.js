@@ -10,51 +10,44 @@ import {
 } from "@carbon/react";
 import { getByoLists, getByo } from "../api/api";
 import { useTranslation } from "react-i18next";
-import Notification from "../component/toast";
 import CurrentCpuReport from "./ByoDashboard/CurrentCpuReport";
 import CurrentMemoryReport from "./ByoDashboard/CurrentMemoryReport";
 import useThemeDetector from "../../components/theme";
 import errorNotification from "../component/errorNotification";
+import { useNotification } from "../component/NotificationManager";
 
 const BYOReport = (props) => {
   const { t } = useTranslation();
   const [byoReports, setByoReports] = useState({});
   const [byoReportLists, setByoReportLists] = useState({});
-  const [showAppStatus, setShowAppStatus] = useState("");
-  const [showNotification, setShowNotification] = useState("");
-  const [showNotificationMsg, setShowNotificationMsg] = useState({});
-  const [showToastContainer, setShowToastContainer] = useState(false);
   const [byoInstanceDetails, setByoInstanceDetails] = useState([]);
 
-  function showNotificationStatus(statusKind, status, statusText) {
-    if (statusKind !== undefined) {
-      setShowAppStatus(statusKind);
-    }
-    if (status !== undefined) {
-      setShowNotification(status);
-    }
-    if (statusText !== undefined) {
-      setShowNotificationMsg(statusText);
-    }
-    if ((statusKind !== undefined && statusKind === "error") || (statusKind !== undefined && statusKind === "success")) {
-      setShowToastContainer(true);
-    }
-  };
+  const addToast = useNotification();
 
-  const resetShowNotification = () => {
-    setShowNotification(false);
+  function showNotificationStatus(statusKind, status, statusText) {
+    if (statusKind && (statusKind === "error" || statusKind === "success")) {
+      addToast({
+        id: status,
+        ariaLabel: statusKind,
+        kind: statusKind,
+        role: "alert",
+        subtitle: statusText,
+        timeout: "",
+        title: (statusKind === "error" ? (t('failed')) : (t('success'))),
+      });
+    }
   };
 
   const getByoInstance = async () => {
     try {
-        const response = await getByo();
-        setByoInstanceDetails(response.instances);
-        props.showPollFlagStatus(response.byoPollingFlag);
+      const response = await getByo();
+      setByoInstanceDetails(response.instances);
+      props.showPollFlagStatus(response.byoPollingFlag);
     } catch (error) {
-        console.log(error);
-        errorNotification(error, t('serverError'), "byoGetInstanceFailed", showNotificationStatus);
+      console.log(error);
+      errorNotification(error, t('serverError'), "byoGetInstanceFailed", showNotificationStatus);
     }
-};
+  };
 
   const getByoReports = async () => {
     const body = {
@@ -88,18 +81,17 @@ const BYOReport = (props) => {
   useEffect(() => {
     getByoInstance();
     let interval;
-    if(byoInstanceDetails !== null && byoInstanceDetails !== undefined){
+    if (byoInstanceDetails !== null && byoInstanceDetails !== undefined) {
       getByoReports();
       interval = setInterval(getByoReports, 10000);
     }
     return () => {
       clearInterval(interval);
     };
-  }, [showToastContainer, byoInstanceDetails]);
+  }, [byoInstanceDetails]);
 
   return (
     <>
-      <Notification key={showNotification} role="alert" timeout="" kind={showAppStatus} subtitle={showNotificationMsg} title={t('failed')} showToastContainer={showToastContainer} resetShowNotification={resetShowNotification} />
       <Column lg={16} md={8} sm={4} className="landing-page__tab-content">
         <Table>
           <TableHead>
@@ -111,19 +103,19 @@ const BYOReport = (props) => {
               ))}
             </TableRow>
           </TableHead>
-            <TableBody>
-              {(byoReportLists && byoReportLists.length === 0) && <TableRow><TableCell colSpan={6}>{t('noRunRecords')}</TableCell></TableRow>}
-              {byoReports && byoReports.ListTest !== undefined && byoReports.ListTest.map((mrl) => (
-                <TableRow key={mrl.ID}>
-                  <TableCell>{mrl.vsiName}</TableCell>
-                  <TableCell>{mrl.vsiuProfile}</TableCell>
-                  <TableCell>{mrl.averageCpuUtilization}</TableCell>
-                  <TableCell>{mrl.averageMemoryUtilization}</TableCell>
-                  <TableCell>{mrl.currentNetworkRxUtilization} | {mrl.currentNetworkTxUtilization}</TableCell>
-                  <TableCell>{mrl.averageIoUtilization}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
+          <TableBody>
+            {(byoReportLists && byoReportLists.length === 0) && <TableRow><TableCell colSpan={6}>{t('noRunRecords')}</TableCell></TableRow>}
+            {byoReports && byoReports.ListTest !== undefined && byoReports.ListTest.map((mrl) => (
+              <TableRow key={mrl.ID}>
+                <TableCell>{mrl.vsiName}</TableCell>
+                <TableCell>{mrl.vsiuProfile}</TableCell>
+                <TableCell>{mrl.averageCpuUtilization}</TableCell>
+                <TableCell>{mrl.averageMemoryUtilization}</TableCell>
+                <TableCell>{mrl.currentNetworkRxUtilization} | {mrl.currentNetworkTxUtilization}</TableCell>
+                <TableCell>{mrl.averageIoUtilization}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </Column>
       {(byoReportLists !== null && byoReportLists.length > 0 && byoReportLists !== undefined) &&
