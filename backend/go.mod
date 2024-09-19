@@ -1,4 +1,4 @@
-module github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc
+module github.ibm.com/workload-eng-services/sandbox
 
 go 1.21.6
 

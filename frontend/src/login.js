@@ -110,7 +110,7 @@ function LoginPage() {
                                 </Form>
                                 <div className='login-footer'>
                                     <p>{t('needHelp')}</p>
-                                    <Link href="https://github.com/IBM-Cloud/sandbox-benchmark-for-vpc/blob/main/user-guide/sandbox-user-guide.md">{t('contactIbm')}</Link>
+                                    <Link href="https://github.ibm.com/workload-eng-services/sandbox/blob/master/user-guide/sandbox-user-guide.md">{t('contactIbm')}</Link>
                                 </div>
                             </div>
                         </div>
