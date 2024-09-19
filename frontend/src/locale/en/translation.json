@@ -149,6 +149,7 @@
   "failedRetrieveMonteLogs": "Failed to retrieve montecarlo run logs",
   "FailedRetrieveAllInstances": "Failed to retrieve all instances",
   "failedRetrieveByoLogs": "Failed to retrieve BYO logs",
+  "failedRetrievePrestoLogs": "Failed to retrieve presto run logs",
   "loginFailed": "Login Failed",
   "error": "Error",
   "run": "Run",

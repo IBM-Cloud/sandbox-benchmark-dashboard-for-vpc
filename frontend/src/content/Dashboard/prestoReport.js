@@ -13,34 +13,28 @@ import {
 import { getPrestoRunLists } from "../api/api";
 import useThemeDetector from "../../components/theme";
 import { useTranslation } from "react-i18next";
-import Notification from "../component/toast";
+import { useNotification } from "../component/NotificationManager";
 
 const PrestoReport = () => {
   const { t } = useTranslation();
   const [prestoReports, setPrestoReports] = useState({});
   const [prestoListsValues, setPrestoListsValues] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showAppStatus, setShowAppStatus] = useState("");
-  const [showNotification, setShowNotification] = useState("");
-  const [showNotificationMsg, setShowNotificationMsg] = useState({});
-  const [showToastContainer, setShowToastContainer] = useState(false);
+
+  const addToast = useNotification();
 
   function showNotificationStatus(statusKind, status, statusText) {
-    if (statusKind !== undefined) {
-      setShowAppStatus(statusKind);
+    if (statusKind && (statusKind === "error" || statusKind === "success")) {
+      addToast({
+        id: status,
+        ariaLabel: statusKind,
+        kind: statusKind,
+        role: "alert",
+        subtitle: statusText,
+        timeout: "",
+        title: (statusKind === "error" ? (t('failed')) : (t('success'))),
+      });
     }
-    if (status !== undefined) {
-      setShowNotification(status);
-    }
-    if (statusText !== undefined) {
-      setShowNotificationMsg(statusText);
-    }
-    if ((statusKind !== undefined && statusKind === "error") || (statusKind !== undefined && statusKind === "success")) {
-      setShowToastContainer(true);
-    }
-  };
-  const resetShowNotification = () => {
-    setShowNotification(false);
   };
 
   const getPrestoReports = async () => {
@@ -92,11 +86,10 @@ const PrestoReport = () => {
   const isDarkTheme = useThemeDetector();
   useEffect(() => {
     getPrestoReports();
-  }, [showToastContainer]);
+  }, []);
 
   return (
     <>
-      <Notification key={showNotification} role="alert" timeout="" kind={showAppStatus} subtitle={showNotificationMsg} title={t('failed')} showToastContainer={showToastContainer} resetShowNotification={resetShowNotification} />
       <Column lg={16} md={8} sm={4} className="landing-page__tab-content">
         <Table>
           <TableHead>
