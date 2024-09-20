@@ -10,23 +10,26 @@ import BenchmarkPage from './content/BenchmarkLogs';
 import Supportpage from './content/support';
 import LoginPage from './login';
 import NotFound from './components/NotFound';
+import { NotificationProvider } from './content/component/NotificationManager';
 
 function App() {
   return (
     <div className="app">
       <BrowserRouter>
-      <Routes>
-          <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<CommonUI />}>
-          <Route index path="/" element={<LandingPage />} />
-          <Route index path="/home" element={<LandingPage />} />
-          <Route path="/performance-dashboard" element={<RepoPage />} />
-          <Route path="/configuration-details" element={<ConfigurationPage />} />
-          <Route path="/benchmarklogs" element={<BenchmarkPage />} />
-          <Route path="/support" element={<Supportpage />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
+        <NotificationProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<CommonUI />}>
+              <Route index path="/" element={<LandingPage />} />
+              <Route index path="/home" element={<LandingPage />} />
+              <Route path="/performance-dashboard" element={<RepoPage />} />
+              <Route path="/configuration-details" element={<ConfigurationPage />} />
+              <Route path="/benchmarklogs" element={<BenchmarkPage />} />
+              <Route path="/support" element={<Supportpage />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </NotificationProvider>
       </BrowserRouter>
     </div>
   );
