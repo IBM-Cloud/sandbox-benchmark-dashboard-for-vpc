@@ -64,14 +64,6 @@ body {
   }
 
 }
-
-.notification-ui {
-  position: fixed;
-  right: $spacing-06;
-  top: 3rem;
-  z-index: 999;
-}
-
 .login-container {
   height: 100%;
 
@@ -185,8 +177,18 @@ body {
 .error-notification{
   margin-bottom: $spacing-05;
 }
-.hide-notification .notification-ui{
-  display: none;
+.generic-toast-container {
+  position: fixed;
+  right: $spacing-06;
+  top: 3rem;
+  z-index: 9999;
+}
+
+.notification-ui {
+  position: relative;
+  display: flex;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
 }
 .session-modal .cds--modal-close-button{
   display: none;
