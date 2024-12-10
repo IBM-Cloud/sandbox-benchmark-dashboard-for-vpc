@@ -742,3 +742,24 @@ export const expectedDarkChartOptions = {
     height: '400px',
   })
 };
+
+export const mockToasts = [
+  {
+      id: 'toast-1',
+      ariaLabel: 'Notification 1',
+      kind: 'success',
+      role: 'status',
+      subtitle: 'Notification subtitle 1',
+      timeout: 5000,
+      title: 'Notification Title 1',
+  },
+  {
+      id: 'toast-2',
+      ariaLabel: 'Notification 2',
+      kind: 'error',
+      role: 'alert',
+      subtitle: 'Notification subtitle 2',
+      timeout: 3000,
+      title: 'Notification Title 2',
+  },
+];

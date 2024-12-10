@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import BenchmarkTable from '../content/configuration/configurationDetails';
 import { getAllInstances } from '../content/api/api';
 import { mockAllInstanceResponse } from './utils';
+import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock('../content/api/api', () => ({
   getAllInstances: jest.fn(),
@@ -12,6 +13,9 @@ jest.mock('../components/theme', () => () => false);
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: key => key }),
 }));
+jest.mock('../content/component/NotificationManager', () => ({
+  useNotification: jest.fn(),
+}));
 
 describe('BenchmarkTable', () => {
   afterEach(() => {
@@ -19,6 +23,7 @@ describe('BenchmarkTable', () => {
   });
 
   it('renders without crashing', async () => {
+    useNotification.mockReturnValue(jest.fn());
     render(<BenchmarkTable />);
     const configElement = await screen.findByText('vsiName');
     expect(configElement).toBeVisible();
@@ -42,10 +47,21 @@ describe('BenchmarkTable', () => {
   });
 
   it('handles API errors gracefully', async () => {
+    useNotification.mockReturnValue(jest.fn());
     getAllInstances.mockRejectedValueOnce(new Error('Failed to retrieve all instances'));
+    const showNotificationStatus = jest.fn();
+    useNotification.mockReturnValue(showNotificationStatus);
     render(<BenchmarkTable />);
     await waitFor(() => {
-      expect(screen.getByText('failedRetrieveInstances')).toBeInTheDocument();
+      expect(showNotificationStatus).toHaveBeenCalledWith(expect.objectContaining({
+        ariaLabel: "error",
+        id: "allInstancesFailed",
+        kind: "error",
+        role: "alert",
+        subtitle: "failedRetrieveInstances",
+        timeout: "",
+        title: "failed"
+      }));
     });
   });
 

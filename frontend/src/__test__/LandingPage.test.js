@@ -1,10 +1,10 @@
 import React from "react";
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 import LandingPage from "../content/LandingPage/LandingPage";
 import * as api from "../content/api/api";
 import { mockMetaData, mockAllInstanceResponse } from "./utils";
+import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock('../components/theme', () => () => false);
 
@@ -34,20 +34,20 @@ jest.mock('@carbon/ibm-products', () => ({
   )),
 }));
 
+jest.mock('../content/component/NotificationManager', () => ({
+  useNotification: jest.fn(),
+}));
+
 describe("LandingPage", () => {
-  let showNotificationStatus;
   beforeEach(() => {
-    api.getMetadata.mockReset();
-    api.getAllInstances.mockReset();
+    jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
   });
 
   it('renders Landing page', async () => {
     render(<LandingPage />);
     const landingTitle = await screen.findByText('appTitle');
     expect(landingTitle).toBeVisible();
-    await waitFor(() => {
-      expect(screen.getByText('notification')).toBeInTheDocument();
-    });
   });
 
   test("renders landing page with loading indicator", () => {
@@ -77,7 +77,6 @@ describe("LandingPage", () => {
     await waitFor(() => {
       expect(api.getMetadata).toHaveBeenCalled();
     });
-    // we are not showing any Metadata details so i have added except only for api call
   });
 
 
@@ -87,25 +86,45 @@ describe("LandingPage", () => {
     await waitFor(() => {
       expect(api.getAllInstances).toHaveBeenCalled();
     });
-    // we are not showing any instance details so i have added except only for api call
   });
 
   test("handles API error for getAllInstances and shows notification", async () => {
     const error = new Error("Failed to fetch instances");
     api.getAllInstances.mockRejectedValue(error);
+    const showNotificationStatus = jest.fn();
+    useNotification.mockReturnValue(showNotificationStatus);
+
     render(<LandingPage />);
     await waitFor(() => {
-      const notification = screen.getByText(/serverError errorLogInfo/i);
-      expect(notification).toBeInTheDocument();
+      expect(showNotificationStatus).toHaveBeenCalledWith(expect.objectContaining({
+        ariaLabel: "error",
+        id: expect.any(String),
+        kind: "error",
+        role: "alert",
+        subtitle: "serverError",
+        timeout: "",
+        title: "failed"
+      }));
     });
   });
 
   test("handles API error for getMetadata and shows notification", async () => {
     const error = new Error("Failed to fetch metadata");
     api.getMetadata.mockRejectedValue(error);
-    render(<LandingPage />);
-    const notification = await screen.findByText("serverError errorLogInfo");
-    expect(notification).toBeInTheDocument();
-  });
+    const showNotificationStatus = jest.fn();
+    useNotification.mockReturnValue(showNotificationStatus);
 
+    render(<LandingPage />);
+    await waitFor(() => {
+      expect(showNotificationStatus).toHaveBeenCalledWith(expect.objectContaining({
+        ariaLabel: "error",
+        id: expect.any(String),
+        kind: "error",
+        role: "alert",
+        subtitle: "serverError",
+        timeout: "",
+        title: "failed"
+      }));
+    });
+  });
 });

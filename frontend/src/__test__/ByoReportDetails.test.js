@@ -12,6 +12,7 @@ import BYOReport from '../content/Dashboard/byoReport';
 import { getByoLists, getByo } from '../content/api/api';
 import * as api from "../content/api/api";
 import { mockGetByoInstanceResponse, mockGetByoRunBenchmarkResponse } from './utils';
+import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock('../components/theme', () => () => false);
 
@@ -20,9 +21,16 @@ jest.mock('../content/api/api', () => ({
   getByo: jest.fn(),
 }));
 
+jest.mock('../content/component/NotificationManager', () => ({
+  useNotification: jest.fn(),
+}));
+
 describe('ByoReport Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    getByo.mockResolvedValue(mockGetByoInstanceResponse);
+    getByoLists.mockResolvedValue(mockGetByoRunBenchmarkResponse);
+    useNotification.mockReturnValue(jest.fn());
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -57,8 +65,9 @@ describe('ByoReport Component', () => {
   });
 
   it("renders the component and charts with records when listtest is not empty", async () => {
-    api.getByoLists.mockResolvedValueOnce(mockGetByoRunBenchmarkResponse);
     render(<BYOReport />);
+    getByo.mockResolvedValueOnce(mockGetByoInstanceResponse);
+    getByoLists.mockResolvedValueOnce(mockGetByoRunBenchmarkResponse);
     await waitFor(() => {
       expect(api.getByoLists).toHaveBeenCalledWith({
         count: 4,
@@ -67,6 +76,7 @@ describe('ByoReport Component', () => {
       });
     });
     expect(await screen.getByText('sbox-byo-vm2-ihvec')).toBeInTheDocument();
+    expect(await screen.getByText('bx3d-8x40')).toBeInTheDocument();
   });
 
 });

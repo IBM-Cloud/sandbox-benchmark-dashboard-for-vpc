@@ -1,4 +1,4 @@
-module github.com/IBM-Cloud/sandbox-benchmark-dashboard-for-vpc
+module github.ibm.com/workload-eng-services/sandbox
 
 go 1.21.6
 
@@ -7,7 +7,7 @@ require (
 	github.com/IBM/vpc-go-sdk v0.50.0
 	github.com/bramvdbogaerde/go-scp v1.4.0
 	github.com/go-playground/validator/v10 v10.19.0
-	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/gorilla/mux v1.8.1
 	github.com/lib/pq v1.10.9
 	github.com/rs/cors v1.11.0

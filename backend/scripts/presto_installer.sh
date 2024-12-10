@@ -56,7 +56,7 @@ su ubuntu -c "cd /home/ubuntu/hadoop-3.2.4/sbin && ./start-all.sh"
 ## install and configure apache hive
 su ubuntu -c '
 cd /home/ubuntu && \
-wget https://downloads.apache.org/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz && \
+wget https://archive.apache.org/dist/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz && \
 tar xzf apache-hive-3.1.3-bin.tar.gz
 '
 
@@ -415,11 +415,11 @@ chmod +x application-presto-benchto.yaml; \
 chmod +x set_env.sh
 '
 
-sed -i -e 's/\(ELIMINATE_CROSS_JOINS\|PARTITIONED\),\?//g' -e 's/\${tpch_[0-9]\+}/\${tpch_10}/g' -e '/tpch_300: tpch_sf300_orc/d; /tpch_1000: tpch_sf1000_orc/d'  -e 's/tpch_3000: tpch_sf3000_orc/tpch_10: tpch_10gb_parquet/' -e "s/runs: 6/runs: 2/" /home/ubuntu/presto-0.285.1/presto-benchto-benchmarks/src/main/resources/benchmarks/presto/tpch.yaml
+sed -i -e 's/\(ELIMINATE_CROSS_JOINS\|PARTITIONED\),\?//g' -e 's/\${tpch_[0-9]\+}/\${tpch_10}/g' -e '/tpch_300: tpch_sf300_orc/d; /tpch_1000: tpch_sf1000_orc/d'  -e 's/tpch_3000: tpch_sf3000_orc/tpch_10: tpch_10gb_parquet/' -e "s/runs: 6/runs: 3/" /home/ubuntu/presto-0.285.1/presto-benchto-benchmarks/src/main/resources/benchmarks/presto/tpch.yaml
 sed -i -e '/^  2:/,$d' -e 's/q05, q07, q08, q09, q17, q18, q21/query/' /home/ubuntu/presto-0.285.1/presto-benchto-benchmarks/src/main/resources/benchmarks/presto/tpch.yaml
 
 cat <<'EOF' >/home/ubuntu/presto-0.285.1/overrides.yaml
-runs: 2
+runs: 3
 tpch_medium: tpch_10gb_parquet
 EOF
 
@@ -529,7 +529,7 @@ pkill nmon
 
 
 ## gather presto benchmark data and utilization metrics
-ExecutionTime=`docker ps | grep postgres | awk '{print $1}' | xargs -I {} docker exec {} bash -c 'psql -U postgres -At -c "select sum(executions_mean_duration) from benchmark_runs;"'`
+ExecutionTime=`docker ps | grep postgres | awk '{print $1}' | xargs -I {} docker exec {} bash -c 'psql -U postgres -At -c "SELECT AVG(value) FROM measurements WHERE id IN (11, 18) AND name = '\''duration'\'';"'`
 Memtotal=`cat $script_dir/presto.nmon| grep -e MemTotal | awk '{ print $2}'`
 MemFree=`cat $script_dir/presto.nmon | grep -e MemFree | awk '{ print $2}'`
 MemUtil=$((($Memtotal-$MemFree)*100/$Memtotal))

@@ -10,6 +10,7 @@ import '@testing-library/jest-dom';
 import AiAmxReport from '../content/Dashboard/huggingReport';
 import * as api from '../content/api/api';
 import { mockGetHuggingInstanceResponse } from './utils';
+import { useNotification } from "../content/component/NotificationManager";
 
 
 jest.mock("@carbon/react", () => ({
@@ -27,19 +28,23 @@ jest.mock('react-i18next', () => ({
     t: key => key
   })
 }));
-
+jest.mock('../content/component/NotificationManager', () => ({
+  useNotification: jest.fn(),
+}));
 describe('HuggingFace Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
   it('renders loading state', async () => {
+    useNotification.mockReturnValue(jest.fn());
     render(<AiAmxReport />);
     const hugReport = await screen.findByText('vsiProfile');
     expect(hugReport).toBeVisible();
   });
 
   it("should display data", async () => {
+    useNotification.mockReturnValue(jest.fn());
     api.getHuggingRunLists.mockResolvedValueOnce(mockGetHuggingInstanceResponse);
     render(<AiAmxReport />);
     await waitFor(() => {
@@ -47,13 +52,12 @@ describe('HuggingFace Component', () => {
     });
   });
 
-  it("sets setShowNotification to false", () => {
-    const mockSetShowNotification = jest.fn();
-    render(
-      <AiAmxReport setShowNotification={mockSetShowNotification} />
-    );
-    mockSetShowNotification(false);
-    expect(mockSetShowNotification).toHaveBeenCalledWith(false);
+  it('renders no records message when data is empty', async () => {
+    api.getHuggingRunLists.mockResolvedValueOnce({ ListTest: [] });
+    render(<AiAmxReport />);
+    await waitFor(() => {
+      expect(screen.getByText('noRunRecords')).toBeInTheDocument();
+    });
   });
 
 });

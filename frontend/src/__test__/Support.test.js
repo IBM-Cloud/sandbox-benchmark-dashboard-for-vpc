@@ -33,12 +33,10 @@ describe('Supportpage Component', () => {
     expect(await screen.getByText('support.exploreListt1')).toBeVisible();
     expect(await screen.getByText('support.exploreListt4')).toBeVisible();
   });
-
   it('displays valid support link', () => {
     render(<Supportpage />);
-    const supportLinks = screen.getAllByRole('link', { name: /https:\/\/github.com\/IBM-Cloud\/sandbox-benchmark-for-vpc\/issues/ });
-    supportLinks.forEach((link) => {
-      expect(link).toHaveAttribute('href', 'https://github.com/IBM-Cloud/sandbox-benchmark-for-vpc/issues');
-    });
+    const supportLink = screen.getByRole('link', { name: /sandbox-benchmark-for-vpc\/issues/ });
+    expect(supportLink).toHaveAttribute('href', 'https://github.com/IBM-Cloud/sandbox-benchmark-for-vpc/issues');
   });
+  
 });

@@ -12,6 +12,7 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 import RepoPage from '../content/Dashboard/dashboard';
 import CommonUIContext from '../content/component/CommonUIContext';
+import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock('../components/theme', () => () => false);
 
@@ -45,7 +46,9 @@ jest.mock('../content/Dashboard/byoReport', () => ({ showPollFlagStatus }) => {
   showPollFlagStatus && showPollFlagStatus('someFlagStatus');
   return <div  data-testid="mock-ByoReport">Byo Report</div>;
 });
-
+jest.mock('../content/component/NotificationManager', () => ({
+  useNotification: jest.fn(),
+}));
 describe('RepoPage Component', () => {
   const setByoState = jest.fn();
   afterEach(() => {
@@ -59,6 +62,7 @@ describe('RepoPage Component', () => {
   );
 
   it('renders RepoPage component with tabs', async () => {
+    useNotification.mockReturnValue(jest.fn());
     render(<RepoPage />);
     const monteElement = await screen.findByText('monte.title');
     expect(monteElement).toBeVisible();
@@ -69,6 +73,7 @@ describe('RepoPage Component', () => {
   });
 
   it('renders MonteCarloReport tab panel on clicking Monte Carlo tab', () => {
+    useNotification.mockReturnValue(jest.fn());
     const { getByText, getByTestId } = render(<RepoPage />);
     expect(getByText('monte.title')).toBeInTheDocument();
     fireEvent.click(getByText('monte.title'));
@@ -77,6 +82,7 @@ describe('RepoPage Component', () => {
   });
 
   it('renders AiAmxReport tab panel on clicking Hugging tab', () => {
+    useNotification.mockReturnValue(jest.fn());
     const { getByText , getByTestId} = render(<RepoPage />);
     fireEvent.click(getByText('hugging.title'));
     const subheading = getByTestId('mock-HuggingReport');
@@ -93,13 +99,5 @@ describe('RepoPage Component', () => {
     const byoReports = screen.getAllByTestId('mock-ByoReport');
     expect(byoReports[0]).toBeInTheDocument();
     expect(setByoState).toHaveBeenCalledWith('someFlagStatus');
-  });
-
-  it('renders MonteCarloReport tab panel with correct subheading', () => {
-    const { getByText, getByTestId } = render(<RepoPage />);
-    fireEvent.click(getByText('monte.title'));
-    const subheading = document.querySelector('.landing-page__subheading');
-    expect(subheading.textContent).toBe('vsiPerformResult');
-    expect(getByTestId('mock-monteCarloReport')).toBeInTheDocument();
   });
 });

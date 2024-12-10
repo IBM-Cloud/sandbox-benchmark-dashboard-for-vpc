@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import ConfigurationDetails from '../content/BenchmarkLogs/BenchmarkTable';
 import * as api from "../content/api/api";
 import { benchmarkLogsMockData, benchmarkLogsMockData2 } from './utils';
+import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -25,6 +26,9 @@ jest.mock('../content/api/api', () => ({
     .mockRejectedValue(new Error('API Error')),
   downloadLogsApi: jest.fn(),
 }));
+jest.mock('../content/component/NotificationManager', () => ({
+  useNotification: jest.fn(),
+}));
 
 describe('ConfigurationDetails Component', () => {
   beforeEach(() => {
@@ -39,8 +43,9 @@ describe('ConfigurationDetails Component', () => {
     expect(benchmarkLogsElement).toBeVisible();
   });
   it("getInstanceStatus", async () => {
+    useNotification.mockReturnValue(jest.fn());
     render(<ConfigurationDetails />);
-    const renewButton = screen.getByRole('button', {name: /renew/i,});
+    const renewButton = screen.getByRole('button', { name: /renew/i, });
     fireEvent.click(renewButton);
     await waitFor(() => expect(api.getInstanceStatus).toHaveBeenCalled());
   });
@@ -63,12 +68,25 @@ describe('ConfigurationDetails Component', () => {
   });
 
   it('handle_fetch_errors', async () => {
-    api.getBenchmarkRunLogs.mockRejectedValue(new Error('Failed to retrieve all benchmark logs'));
-    const { getByRole, findByText } = render(<ConfigurationDetails />);
-    const refreshButton = getByRole('button', { name: 'renew' });
+    const addToastMock = jest.fn();
+    useNotification.mockReturnValue(addToastMock);
+    api.getBenchmarkRunLogs.mockRejectedValueOnce(new Error('API Error'));
+    render(<ConfigurationDetails />);
+    const refreshButton = screen.getByRole('button', { name: 'renew' });
     fireEvent.click(refreshButton);
-    const errorMessage = await findByText('Failed to retrieve all benchmark logs');
-    expect(errorMessage).toHaveTextContent('Failed to retrieve all benchmark logs');
+    await waitFor(() => {
+      expect(addToastMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          ariaLabel: "error", 
+          id: "getAllLogsFailed", 
+          kind: "error", 
+          role: "alert", 
+          subtitle: "Failed to retrieve all benchmark logs", 
+          timeout: "", 
+          title: "failed"
+        })
+      );
+    });
   });
 
   it('should set showAppStatus, showNotification, showNotificationMsg, and showToastContainer correctly', () => {
@@ -95,8 +113,8 @@ describe('ConfigurationDetails Component', () => {
   });
 
   it('test_handle_logs_pagination', async () => {
-    render(<ConfigurationDetails />);
     api.getBenchmarkRunLogs.mockResolvedValueOnce(benchmarkLogsMockData);
+    render(<ConfigurationDetails />);
 
     await waitFor(async () => {
       const firstLogName = await screen.findByText("presto-benchmark-wzs2o");
@@ -104,25 +122,22 @@ describe('ConfigurationDetails Component', () => {
       expect(firstLogName).toBeInTheDocument();
       expect(secondLogName).toBeInTheDocument();
     });
+
     api.getBenchmarkRunLogs.mockResolvedValueOnce(benchmarkLogsMockData2);
 
     const nextPageButton = await screen.findByText('nextPage');
-    const pageInput = await screen.findByText('1');
-
     fireEvent.click(nextPageButton);
-    fireEvent.change(pageInput, { target: { value: 2 } });
-    api.getBenchmarkRunLogs.mockResolvedValueOnce(benchmarkLogsMockData2);
-    await waitFor(async () => {
-      const firstLogName = await screen.findByText("presto-benchmark-plpsc");
-      const secondLogName = await screen.findByText("presto-benchmark-ln7r4");
-      expect(firstLogName).toBeInTheDocument();
-      expect(secondLogName).toBeInTheDocument();
-    });
 
+    await waitFor(async () => {
+      const firstLogNameNew = await screen.findByText("presto-benchmark-plpsc");
+      const secondLogNameNew = await screen.findByText("presto-benchmark-ln7r4");
+      expect(firstLogNameNew).toBeInTheDocument();
+      expect(secondLogNameNew).toBeInTheDocument();
+    });
   });
 
   it('calls handleDownloadOpen with the correct cell value when download button is clicked', async () => {
-    
+
     const { container } = render(<ConfigurationDetails />);
     api.getBenchmarkRunLogs.mockResolvedValueOnce(benchmarkLogsMockData);
     const mockLogText = 'some log data';
