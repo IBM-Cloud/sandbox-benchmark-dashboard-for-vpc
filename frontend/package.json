@@ -59,6 +59,9 @@
     "express": "^4.21.1",
     "http-proxy-middleware": "^2.0.7"
   },
+  "resolutions": {
+    "path-to-regexp": "^1.8.0"
+  },
   "devDependencies": {
     "@babel/preset-env": "^7.24.3",
     "@babel/preset-react": "^7.24.1",
