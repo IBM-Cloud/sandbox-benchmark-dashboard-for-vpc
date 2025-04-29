@@ -15,7 +15,7 @@ services:
       privileged: true
       environment:
         - "IAM_TRUSTED_PROFILEID=__TRUSTED_PROFILE__" # Placeholder for IAM trusted profile
-        - "IBM_SSHKEY_NAME=__IBM_SSHKEY_NAME__" # Placeholder for IBM Cloud SSH Key name
+        - "IBM_SSHKEY_ID=__IBM_SSHKEY_ID__" # Placeholder for IBM Cloud SSH Key id
         - "DB_USERNAME=postgres"
         - "DB_PASSWORD=__DB_PASSWORD__" ## Placeholder for sandbox db password
         - "DB_HOST=sandbox-db"

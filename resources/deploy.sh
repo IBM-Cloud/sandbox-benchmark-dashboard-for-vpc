@@ -7,10 +7,10 @@ set -x
 SRC_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)"
 
 if [ $# -lt 3 ]; then
-  echo "Usage: ./deploy.sh IAM_TRUSTED_PROFILEID UI_PASSWORD IBM_SSHKEY_NAME"
+  echo "Usage: ./deploy.sh IAM_TRUSTED_PROFILEID UI_PASSWORD IBM_SSHKEY_ID"
   echo "Please provide the IAM Trusted ProfileID."
   echo "Please provide the UI password."
-  echo "Please provide the IBM Cloud SSH Key name."
+  echo "Please provide the IBM Cloud SSH Key id."
   exit 1
 fi
 
@@ -19,7 +19,7 @@ DB_PASSWORD=`tr -dc A-Za-z0-9 </dev/urandom | head -c 13; echo`
 
 IAM_TRUSTED_PROFILEID=$1
 UI_PASSWORD=$2
-IBM_SSHKEY_NAME=$3
+IBM_SSHKEY_ID=$3
 
 ## Check for IAM Trusted profileID
 if [ -z "$IAM_TRUSTED_PROFILEID" ]; then
@@ -34,8 +34,8 @@ if [ -z "$UI_PASSWORD" ]; then
 fi
 
 ## Check for UI Password input
-if [ -z "$IBM_SSHKEY_NAME" ]; then
-  echo "Please provide the IBM Cloud SSH Key name."
+if [ -z "$IBM_SSHKEY_ID" ]; then
+  echo "Please provide the IBM Cloud SSH Key id."
   exit 1
 fi
 
@@ -64,6 +64,6 @@ sed -i "s/ENCODE_PASSWORD/$UI_PASSWORD/g" $DB_SCHEMA_SCRIPT
 sed -i "s/__DB_PASSWORD__/$DB_PASSWORD/g" $SRC_ROOT/resources/docker-compose.yml
 sed -i "s|__DB_SCHEMA_SCRIPT__|$DB_SCHEMA_SCRIPT|g" $SRC_ROOT/resources/docker-compose.yml
 sed -i "s/__TRUSTED_PROFILE__/$IAM_TRUSTED_PROFILEID/g" $SRC_ROOT/resources/docker-compose.yml
-sed -i "s/__IBM_SSHKEY_NAME__/$IBM_SSHKEY_NAME/g" $SRC_ROOT/resources/docker-compose.yml
+sed -i "s/__IBM_SSHKEY_ID__/$IBM_SSHKEY_ID/g" $SRC_ROOT/resources/docker-compose.yml
 
 docker-compose -f $SRC_ROOT/resources/docker-compose.yml up -d 

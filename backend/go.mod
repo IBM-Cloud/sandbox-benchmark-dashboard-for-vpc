@@ -1,17 +1,17 @@
 module github.ibm.com/workload-eng-services/sandbox
 
-go 1.21.6
+go 1.24.1
 
 require (
 	github.com/IBM/go-sdk-core/v5 v5.16.3
 	github.com/IBM/vpc-go-sdk v0.50.0
 	github.com/bramvdbogaerde/go-scp v1.4.0
 	github.com/go-playground/validator/v10 v10.19.0
-	github.com/golang-jwt/jwt/v4 v4.5.1
+	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/lib/pq v1.10.9
 	github.com/rs/cors v1.11.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.36.0
 )
 
 require (
@@ -28,8 +28,8 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	go.mongodb.org/mongo-driver v1.14.0 // indirect
-	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

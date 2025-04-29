@@ -144,7 +144,7 @@ function CommonUI() {
                   onClick={onClickSideNavExpand}
                   isActive={isSideNavExpanded}
                 />
-                <HeaderName onClick={(e) => handleSideNavLinkClick(e, "/")} prefix="">
+                <HeaderName onClick={(e) => handleSideNavLinkClick(e, "/home")} prefix="">
                   {t('appTitle')}
                 </HeaderName>
                 <HeaderGlobalBar className="right-header-gbl">
