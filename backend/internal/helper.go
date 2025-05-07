@@ -868,23 +868,19 @@ func InsertPrestoBenchmarkData(db *sql.DB, dir string, keyPairName string, confi
 
 //--------------------functions used for instance and benchmark------------------------------
 
-func GetSSHKeyID(vpcService *vpcv1.VpcV1, keyName string) (string, error) {
-	// List all SSH keys
-	listKeysOptions := vpcService.NewListKeysOptions()
-	keys, _, err := vpcService.ListKeys(listKeysOptions)
+func GetSSHKeyByID(vpcService *vpcv1.VpcV1, keyID string) (string, error) {
+	// Create options to specify the key ID
+	getKeyOptions := vpcService.NewGetKeyOptions(keyID)
+
+	// Retrieve the key directly by ID
+	key, _, err := vpcService.GetKey(getKeyOptions)
 	if err != nil {
-		log.Printf("error listing keys: %s", err)
-		return "", fmt.Errorf("error listing keys: %s", err)
+		log.Printf("error retrieving key with ID %s: %s", keyID, err)
+		return "", fmt.Errorf("error retrieving key with ID %s: %s", keyID, err)
 	}
 
-	// Iterate through the keys to find the one with the given name
-	for _, key := range keys.Keys {
-		if *key.Name == keyName {
-			return *key.ID, nil
-		}
-	}
-	log.Printf("SSH key with name %s not found", keyName)
-	return "", fmt.Errorf("SSH key with name %s not found", keyName)
+	// If the key is found, return the key ID
+	return *key.ID, nil
 }
 
 func CreateInstance(db *sql.DB, vpcService *vpcv1.VpcV1, appType string, apiName string, instProfilename8CPU []string, instProfilename16CPU []string, installerPath string, application string, req InstanceRequest) (string, error) {
@@ -955,13 +951,13 @@ func CreateInstance(db *sql.DB, vpcService *vpcv1.VpcV1, appType string, apiName
 		zone := req.Zone
 		resourcegroup := req.Resourcegroup
 
-		ibmSshKeyName := os.Getenv(IbmSshKeyName)
+		IbmSshKeyID := os.Getenv(IbmSshKeyID)
 		var keys []vpcv1.KeyIdentityIntf
 
 		keyIDentityModel := &vpcv1.KeyIdentityByID{ID: keyID}
 		keys = append(keys, keyIDentityModel)
-		if ibmSshKeyName != "" {
-			ibmSshKeyId, err := GetSSHKeyID(vpcService, ibmSshKeyName)
+		if IbmSshKeyID != "" {
+			ibmSshKeyId, err := GetSSHKeyByID(vpcService, IbmSshKeyID)
 			if err != nil {
 				log.Println("Error fetching key ID:", err)
 				DeleteKeyFile(keyName) //deletes the ssh key created for the vsi above

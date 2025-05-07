@@ -2,7 +2,7 @@ import React from 'react';
 import CommonUI from './content/commonui/commonui';
 import './App.scss';
 import './App.css';
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 import LandingPage from './content/LandingPage';
 import ConfigurationPage from './content/configuration/configuration';
 import RepoPage from './content/Dashboard';
@@ -18,9 +18,9 @@ function App() {
       <BrowserRouter>
         <NotificationProvider>
           <Routes>
+            <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<CommonUI />}>
-              <Route index path="/" element={<LandingPage />} />
               <Route index path="/home" element={<LandingPage />} />
               <Route path="/performance-dashboard" element={<RepoPage />} />
               <Route path="/configuration-details" element={<ConfigurationPage />} />
