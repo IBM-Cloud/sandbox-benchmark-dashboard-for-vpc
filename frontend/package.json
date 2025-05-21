@@ -69,7 +69,6 @@
   },
   "resolutions": {
     "path-to-regexp": "^1.8.0",
-    "dompurify": "^3.2.4",
     "@babel/runtime": "^7.26.10"
   },
   "devDependencies": {
