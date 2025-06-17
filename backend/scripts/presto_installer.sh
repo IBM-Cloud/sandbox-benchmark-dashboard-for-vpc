@@ -8,7 +8,7 @@ cd /home/ubuntu/ && \
 ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa && \
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && \
 chmod 0600 ~/.ssh/authorized_keys && \
-wget https://downloads.apache.org/hadoop/common/hadoop-3.2.4/hadoop-3.2.4.tar.gz && \
+sudo wget https://downloads.apache.org/hadoop/common/hadoop-3.2.4/hadoop-3.2.4.tar.gz && \
 tar -xzf hadoop-3.2.4.tar.gz && \
 sudo apt update -y && \
 sudo apt install openjdk-8-jdk openssh-server openssh-client nmon ksh mysql-server -y
@@ -56,7 +56,7 @@ su ubuntu -c "cd /home/ubuntu/hadoop-3.2.4/sbin && ./start-all.sh"
 ## install and configure apache hive
 su ubuntu -c '
 cd /home/ubuntu && \
-wget https://archive.apache.org/dist/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz && \
+sudo wget https://archive.apache.org/dist/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz && \
 tar xzf apache-hive-3.1.3-bin.tar.gz
 '
 
@@ -80,7 +80,8 @@ cp /home/ubuntu/hadoop-3.2.4/share/hadoop/hdfs/lib/guava-27.0-jre.jar /home/ubun
 ## run hive server
 su ubuntu -c "cd /home/ubuntu/apache-hive-3.1.3-bin/bin; ./hive & sleep 10"
 su ubuntu -c '
-cd /home/ubuntu/apache-hive-3.1.3-bin/lib && wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.30/mysql-connector-java-8.0.30.jar
+cd /home/ubuntu/apache-hive-3.1.3-bin/lib
+sudo wget https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.30/mysql-connector-java-8.0.30.jar
 '
 
 cat <<'EOF' >/home/ubuntu/apache-hive-3.1.3-bin/conf/hive-site.xml
@@ -183,7 +184,7 @@ su ubuntu -c "cd /home/ubuntu/apache-hive-3.1.3-bin/conf; export PATH=/home/ubun
 
 su ubuntu -c '
 cd /home/ubuntu/apache-hive-3.1.3-bin/lib && \
-wget -nc https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.30/mysql-connector-java-8.0.30.jar
+sudo wget -nc https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.30/mysql-connector-java-8.0.30.jar
 mkdir -p /home/ubuntu/apache-hive-3.1.3-bin/hcatalog/var/log
 '
 
@@ -199,7 +200,7 @@ cd /home/ubuntu/benchto ; \
 ## setup presto-benchto benchmarks
 su ubuntu -c '
 cd /home/ubuntu; \
-wget https://github.com/prestodb/presto/archive/refs/tags/0.285.1.tar.gz; \
+sudo wget https://github.com/prestodb/presto/archive/refs/tags/0.285.1.tar.gz; \
 tar xzf 0.285.1.tar.gz; \
 git clone https://github.com/prestodb/presto.git && \
 cd /home/ubuntu; \
@@ -210,7 +211,7 @@ cd /home/ubuntu/presto-0.285.1; \
 
 su ubuntu -c '
 cd /home/ubuntu; \
-wget -O test-docker.sh https://test.docker.com; \
+sudo wget -O test-docker.sh https://test.docker.com; \
 sh test-docker.sh; \
 rm -rf test-docker.sh
 '
@@ -232,7 +233,7 @@ sleep 30
 ## download and configure presto package
 su ubuntu -c '
 cd /home/ubuntu; \
-wget https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.285/presto-server-0.285.tar.gz && \
+sudo wget https://repo1.maven.org/maven2/com/facebook/presto/presto-server/0.285/presto-server-0.285.tar.gz && \
 tar xf presto-server-0.285.tar.gz && \
 cd /home/ubuntu/presto-server-0.285; \
 mkdir /home/ubuntu/presto-server-0.285/etc
@@ -317,7 +318,7 @@ sudo ./launcher start ; sleep 30
 '
 
 ## download presto-cli and update tpch_10gb_text schemas for presto benchto benchmarks
-su ubuntu -c "cd /home/ubuntu/presto-server-0.285/bin ; wget https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/0.283/presto-cli-0.283-executable.jar;mv presto-cli-0.283-executable.jar presto;chmod +x presto"
+su ubuntu -c "cd /home/ubuntu/presto-server-0.285/bin ; sudo wget https://repo1.maven.org/maven2/com/facebook/presto/presto-cli/0.283/presto-cli-0.283-executable.jar;mv presto-cli-0.283-executable.jar presto;sudo chmod +x presto"
 
 su ubuntu -c "cd /home/ubuntu/presto-0.285.1/presto-benchto-benchmarks/generate_schemas"
 sed -i -e '/tpch_10gb_orc.*tpch\.sf10/,/tpch_1tb_text.*hive\.tpch_1tb_orc/d' -e "s/('tpch_10tb_text', 'hive.tpch_10tb_orc'),/('tpch_10gb_parquet', 'tpch.sf10'),/" -e 's/table)/table))/' -e 's/_orc/_parquet/' -e 's/ORC/PARQUET/' -e "s/'CREATE/('CREATE/g" -e "s/(new_schema,)/(new_schema,))/g" /home/ubuntu/presto-0.285.1/presto-benchto-benchmarks/generate_schemas/generate-tpch.py
@@ -337,7 +338,7 @@ cd /home/ubuntu/presto-0.285.1/presto-benchto-benchmarks/generate_schemas; \
 python3 generate-tpch.py | \
 /home/ubuntu/presto-server-0.285/bin/presto --server localhost:8080 --catalog hive --schema default; \
 cd /home/ubuntu/presto-0.285.1; \
-wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.285/presto-jdbc-0.285.jar
+sudo wget https://repo1.maven.org/maven2/com/facebook/presto/presto-jdbc/0.285/presto-jdbc-0.285.jar
 '
 
 cat <<'EOF' >/home/ubuntu/presto-0.285.1/application-presto-benchto.yaml
@@ -361,18 +362,18 @@ macros:
     command: echo “Sleeping for 4s” && sleep 4
 EOF
 
-cat <<'EOF' >/home/ubuntu/presto-0.285.1/set_env.sh
-curl -H 'Content-Type: application/json' -d '{
+cat <<'EEOF' >/home/ubuntu/presto-0.285.1/set_env.sh
+sudo curl -H 'Content-Type: application/json' -d '{
   "dashboardType": "grafana",
   "dashboardURL": "http://admin:admin@host_ip_addr:3000/dashboard/db/presto-benchto",
   "prestoURL": "http://host_ip_addr:8080"
 }' http://host_ip_addr:80/v1/environment/PRESTO-BENCHTO
 
-curl -H 'Content-Type: application/json' -d '{
+sudo curl -H 'Content-Type: application/json' -d '{
   "name": "Short tag desciption",
   "description": "Very long but optional tag description"
 }' http://host_ip_addr:80/v1/tag/PRESTO-BENCHTO
-EOF
+EEOF
 
 sed -i '/^import okhttp3\.Protocol;/a\
 import com.facebook.presto.jdbc.internal.guava.net.HostAndPort;\
