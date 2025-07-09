@@ -65,7 +65,8 @@
     "@babel/runtime": "^7.26.10",
     "@carbon/react": {
       "react-is": "^18.3.1"
-    }
+    },
+    "webpack-dev-server": "^5.2.2"
   },
   "resolutions": {
     "path-to-regexp": "^1.8.0",

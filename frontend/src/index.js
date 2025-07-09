@@ -5,11 +5,14 @@ import './index.scss';
 import App from './App';
 import './translation/i18n'
 import reportWebVitals from './reportWebVitals';
+import { unstable_FeatureFlags as FeatureFlags } from '@carbon/ibm-products';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <FeatureFlags enableSidepanelResizer>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </FeatureFlags>
 );
 reportWebVitals();

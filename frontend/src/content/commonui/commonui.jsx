@@ -151,6 +151,7 @@ function CommonUI() {
                   <HeaderGlobalAction
                     aria-label="Notifications"
                     tooltipAlignment="end"
+                    className="custom-notify-menu"
                   >
                     <Notification size={20} />
                   </HeaderGlobalAction>
