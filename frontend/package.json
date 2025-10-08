@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@carbon/charts-react": "^1.13.30",
-    "@carbon/ibm-products": "^2.17.1",
+    "@carbon/ibm-products": "^2.21.0",
     "@carbon/react": "^1.39.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
