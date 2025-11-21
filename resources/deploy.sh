@@ -66,4 +66,4 @@ sed -i "s|__DB_SCHEMA_SCRIPT__|$DB_SCHEMA_SCRIPT|g" $SRC_ROOT/resources/docker-c
 sed -i "s/__TRUSTED_PROFILE__/$IAM_TRUSTED_PROFILEID/g" $SRC_ROOT/resources/docker-compose.yml
 sed -i "s/__IBM_SSHKEY_ID__/$IBM_SSHKEY_ID/g" $SRC_ROOT/resources/docker-compose.yml
 
-docker-compose -f $SRC_ROOT/resources/docker-compose.yml up -d 
+docker compose -f $SRC_ROOT/resources/docker-compose.yml up -d 
