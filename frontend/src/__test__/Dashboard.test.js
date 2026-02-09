@@ -1,18 +1,8 @@
-
-global.matchMedia = global.matchMedia || function () {
-  return {
-    matches: false,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-  };
-};
-import React from 'react';
+import React, { useContext } from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 import RepoPage from '../content/Dashboard/dashboard';
 import CommonUIContext from '../content/component/CommonUIContext';
-import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock('../components/theme', () => () => false);
 
@@ -23,32 +13,17 @@ jest.mock('react-i18next', () => ({
 jest.mock('../content/api/api', () => ({
   getMetadata: jest.fn(),
   getAllInstances: jest.fn(),
+  getPrestoRunLists: jest.fn(() => Promise.resolve({ ListTest: [] })),
+  getMonteCarloRunLists: jest.fn(() => Promise.resolve([])),
 }));
 
-jest.mock('../content/component/CommonUIContext', () => {
-  const React = require('react');
-  return {
-    __esModule: true,
-    default: React.createContext({
-      setByoState: jest.fn(),
-    })
-  };
-});
-jest.mock('../content/component/CommonUIContext');
-const mockShowPollFlagStatus = jest.fn();
 jest.mock('../content/Dashboard/byoReport', () => ({ showPollFlagStatus }) => {
-  mockShowPollFlagStatus.mockImplementation(showPollFlagStatus);
-  return <div data-testid="byoReport" />;
+  return <div data-testid="mock-ByoReport" onClick={() => showPollFlagStatus && showPollFlagStatus('someFlagStatus')}>Byo Report</div>;
 });
 jest.mock('../content/Dashboard/monteCarloReport', () => () => <div data-testid="mock-monteCarloReport">Monte Carlo Report</div>);
 jest.mock('../content/Dashboard/huggingReport', () => () => <div data-testid="mock-HuggingReport">Hugging Report</div>);
-jest.mock('../content/Dashboard/byoReport', () => ({ showPollFlagStatus }) => {
-  showPollFlagStatus && showPollFlagStatus('someFlagStatus');
-  return <div  data-testid="mock-ByoReport">Byo Report</div>;
-});
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
+jest.mock('../content/Dashboard/prestoReport', () => () => <div data-testid="mock-PrestoReport">Presto Report</div>);
+
 describe('RepoPage Component', () => {
   const setByoState = jest.fn();
   afterEach(() => {
@@ -62,8 +37,7 @@ describe('RepoPage Component', () => {
   );
 
   it('renders RepoPage component with tabs', async () => {
-    useNotification.mockReturnValue(jest.fn());
-    render(<RepoPage />);
+    renderComponent({ setByoState });
     const monteElement = await screen.findByText('monte.title');
     expect(monteElement).toBeVisible();
     const huggingElement = await screen.findByText('hugging.title');
@@ -73,31 +47,27 @@ describe('RepoPage Component', () => {
   });
 
   it('renders MonteCarloReport tab panel on clicking Monte Carlo tab', () => {
-    useNotification.mockReturnValue(jest.fn());
-    const { getByText, getByTestId } = render(<RepoPage />);
-    expect(getByText('monte.title')).toBeInTheDocument();
-    fireEvent.click(getByText('monte.title'));
-    const subheading = getByTestId('mock-monteCarloReport');
+    renderComponent({ setByoState });
+    expect(screen.getByText('monte.title')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('monte.title'));
+    const subheading = screen.getByTestId('mock-monteCarloReport');
     expect(subheading.textContent).toBe('Monte Carlo Report');
   });
 
   it('renders AiAmxReport tab panel on clicking Hugging tab', () => {
-    useNotification.mockReturnValue(jest.fn());
-    const { getByText , getByTestId} = render(<RepoPage />);
-    fireEvent.click(getByText('hugging.title'));
-    const subheading = getByTestId('mock-HuggingReport');
+    renderComponent({ setByoState });
+    fireEvent.click(screen.getByText('hugging.title'));
+    const subheading = screen.getByTestId('mock-HuggingReport');
     expect(subheading.textContent).toBe('Hugging Report');
   });
 
-  it('renders BYOReport tab panel on clicking BYO App tab', async() => {
+  it('renders BYOReport tab panel on clicking BYO App tab', async () => {
     renderComponent({ setByoState });
-    render(<RepoPage />);
-    const byoTabs = screen.getAllByRole('tab', { name: /byoApp/i });
-    expect(byoTabs.length).toBeGreaterThan(0);
-    const byoTab = byoTabs[0];
+    const byoTab = screen.getByRole('tab', { name: /byoApp/i });
     fireEvent.click(byoTab);
-    const byoReports = screen.getAllByTestId('mock-ByoReport');
-    expect(byoReports[0]).toBeInTheDocument();
+    const byoReport = screen.getByTestId('mock-ByoReport');
+    expect(byoReport).toBeInTheDocument();
+    fireEvent.click(byoReport);
     expect(setByoState).toHaveBeenCalledWith('someFlagStatus');
   });
 });

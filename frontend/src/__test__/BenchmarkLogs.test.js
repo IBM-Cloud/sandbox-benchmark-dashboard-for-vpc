@@ -12,11 +12,11 @@ jest.mock("react-i18next", () => ({
 jest.mock('../content/api/api', () => ({
 }));
 
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
-
 describe("BenchmarkPage component", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
+  });
   it("renders without errors", async () => {
     useNotification.mockReturnValue(jest.fn());
     render(<BenchmarkPage />);

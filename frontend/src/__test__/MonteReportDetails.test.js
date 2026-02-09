@@ -1,9 +1,3 @@
-class ResizeObserver {
-  observe() { }
-  unobserve() { }
-  disconnect() { }
-}
-global.ResizeObserver = ResizeObserver;
 import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -18,15 +12,14 @@ jest.mock('../components/theme', () => () => false);
 jest.mock('../content/api/api', () => ({
   getMonteCarloRunLists: jest.fn(),
 }));
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
+// Redundant useNotification mock removed
 describe('MonteCarloReport Component', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
   beforeEach(() => {
     jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
   });
 
   it('displays notification on API error', async () => {

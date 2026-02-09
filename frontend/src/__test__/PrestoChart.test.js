@@ -1,9 +1,3 @@
-class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-global.ResizeObserver = ResizeObserver;
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import '@testing-library/jest-dom';
@@ -15,9 +9,6 @@ import { expectedPrestoChartOptions, expectedDarkChartOptions } from "./utils";
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: key => key })
 }));
-jest.mock('@carbon/charts-react', () => ({
-  SimpleBarChart: jest.fn(() => <div>SimpleBarChart</div>),
-}));
 
 describe("PrestoChart component", () => {
   beforeEach(() => {
@@ -25,26 +16,22 @@ describe("PrestoChart component", () => {
   });
 
   test('renders without crashing', () => {
-    const { getByText } = render(<PrestoChart bx2="100" bx3="200" isDarkTheme={false} />);
-    expect(getByText('SimpleBarChart')).toBeInTheDocument();
+    const { getByTestId } = render(<PrestoChart bx2="100" bx3="200" isDarkTheme={false} />);
+    expect(getByTestId('mock-SimpleBarChart')).toBeInTheDocument();
   });
 
   test('displays correct data and options when isDarkTheme is false', () => {
     render(<PrestoChart bx2="100" bx3="200" isDarkTheme={false} />);
-
-    expect(SimpleBarChart).toHaveBeenCalledWith(
-      expect.objectContaining(expectedDarkChartOptions),
-      {}
-    );
+    const chartElement = screen.getByTestId('mock-SimpleBarChart');
+    const options = JSON.parse(chartElement.getAttribute('data-options'));
+    expect(options).toEqual(expectedDarkChartOptions.options);
   });
 
   test('displays correct data and options when isDarkTheme is true', () => {
     render(<PrestoChart bx2="300" bx3="400" isDarkTheme={true} />);
-
-    expect(SimpleBarChart).toHaveBeenCalledWith(
-      expect.objectContaining(expectedPrestoChartOptions),
-      {}
-    );
+    const chartElement = screen.getByTestId('mock-SimpleBarChart');
+    const options = JSON.parse(chartElement.getAttribute('data-options'));
+    expect(options).toEqual(expectedPrestoChartOptions.options);
   });
 
 });
