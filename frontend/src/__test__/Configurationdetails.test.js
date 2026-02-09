@@ -13,13 +13,13 @@ jest.mock('../components/theme', () => () => false);
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: key => key }),
 }));
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
 
 describe('BenchmarkTable', () => {
   afterEach(() => {
     jest.clearAllMocks();
+  });
+  beforeEach(() => {
+    useNotification.mockReturnValue(jest.fn());
   });
 
   it('renders without crashing', async () => {

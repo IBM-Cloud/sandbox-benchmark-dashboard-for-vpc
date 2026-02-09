@@ -1,9 +1,3 @@
-class ResizeObserver {
-  observe() { }
-  unobserve() { }
-  disconnect() { }
-}
-global.ResizeObserver = ResizeObserver;
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -30,8 +24,8 @@ describe('AiAmxCPUReport component', () => {
       isDarkTheme: true,
     };
 
-    const { container } = render(<AiAmxCPUReport {...props} />);
-    const chartElement = container.querySelector('.chart-holder');
+    const { getByTestId } = render(<AiAmxCPUReport {...props} />);
+    const chartElement = getByTestId('mock-SimpleBarChart');
     expect(chartElement).toBeInTheDocument();
   });
 

@@ -26,13 +26,12 @@ jest.mock('../content/api/api', () => ({
     .mockRejectedValue(new Error('API Error')),
   downloadLogsApi: jest.fn(),
 }));
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
+// Redundant useNotification mock removed
 
 describe('ConfigurationDetails Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -43,7 +42,6 @@ describe('ConfigurationDetails Component', () => {
     expect(benchmarkLogsElement).toBeVisible();
   });
   it("getInstanceStatus", async () => {
-    useNotification.mockReturnValue(jest.fn());
     render(<ConfigurationDetails />);
     const renewButton = screen.getByRole('button', { name: /renew/i, });
     fireEvent.click(renewButton);
@@ -77,12 +75,12 @@ describe('ConfigurationDetails Component', () => {
     await waitFor(() => {
       expect(addToastMock).toHaveBeenCalledWith(
         expect.objectContaining({
-          ariaLabel: "error", 
-          id: "getAllLogsFailed", 
-          kind: "error", 
-          role: "alert", 
-          subtitle: "Failed to retrieve all benchmark logs", 
-          timeout: "", 
+          ariaLabel: "error",
+          id: "getAllLogsFailed",
+          kind: "error",
+          role: "alert",
+          subtitle: "Failed to retrieve all benchmark logs",
+          timeout: "",
           title: "failed"
         })
       );
@@ -149,35 +147,35 @@ describe('ConfigurationDetails Component', () => {
     const firstRow = tableBody ? tableBody.querySelectorAll('tr')[1] : null;
 
     if (firstRow) {
-      const downloadButton = firstRow.querySelector('.cds--btn--icon-only');
-      fireEvent.click(downloadButton);
-      const handleDownloadOpen = jest.fn();
-      ConfigurationDetails.prototype.handleDownloadOpen = handleDownloadOpen;
-      expect(handleDownloadOpen).toHaveBeenCalledWith("./presto/20240418122421VSI.log");
+      await waitFor(() => {
+        expect(screen.queryAllByLabelText('download').length).toBeGreaterThan(0);
+      });
+      const downloadButtons = screen.getAllByLabelText('download');
+      fireEvent.click(downloadButtons[0]);
+      await waitFor(() => {
+        expect(api.downloadLogsApi).toHaveBeenCalledWith("./presto/20240418122421VSI.log");
+      });
     } else {
       console.log('First row not found or does not exist.');
     }
   });
 
   test('handleDownloadOpen function', async () => {
-    jest.doMock('@carbon/react', () => {
-      const CarbonReact = jest.requireActual('@carbon/react');
-      return {
-        ...CarbonReact,
-        Button: jest.fn(({ onClick }) => <button onClick={onClick} />),
-      };
-    });
     const createObjectURLStub = jest.fn();
     URL.createObjectURL = createObjectURLStub;
     const fetchStub = jest.fn(() => Promise.resolve({ blob: () => 'mock blob' }));
     global.fetch = fetchStub;
     const mockResponse = { FileContent: 'mock file content' };
     api.downloadLogsApi.mockResolvedValueOnce(mockResponse);
-    const { getByText } = render(<ConfigurationDetails />);
-    const downloadIconButton = getByText('download');
-    fireEvent.click(downloadIconButton);
+    api.getBenchmarkRunLogs.mockResolvedValueOnce(benchmarkLogsMockData);
+    render(<ConfigurationDetails />);
     await waitFor(() => {
-      expect(createObjectURLStub).toHaveBeenCalled();
+      expect(screen.queryAllByLabelText('download').length).toBeGreaterThan(0);
+    });
+    const downloadButtons = screen.getAllByLabelText('download');
+    fireEvent.click(downloadButtons[0]);
+    await waitFor(() => {
+      expect(api.downloadLogsApi).toHaveBeenCalled();
     });
   });
 

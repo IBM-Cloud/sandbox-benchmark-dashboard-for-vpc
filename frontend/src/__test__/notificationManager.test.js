@@ -5,6 +5,8 @@ import { NotificationProvider, useNotification } from '../content/component/Noti
 import Notification from '../content/component/toast';
 import { useLocation } from 'react-router-dom';
 
+jest.unmock('../content/component/NotificationManager');
+
 jest.mock('../content/component/toast', () => ({
     __esModule: true,
     default: jest.fn(({ toasts }) => (
@@ -71,5 +73,5 @@ describe('NotificationProvider Component', () => {
 
         expect(screen.queryByText('Test Toast')).not.toBeInTheDocument();
     });
-    
+
 });

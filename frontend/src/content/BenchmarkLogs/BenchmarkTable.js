@@ -77,7 +77,7 @@ const ConfigurationDetails = () => {
   }
 
   const addToast = useNotification();
-  
+
   function showNotificationStatus(statusKind, status, statusText) {
     if (statusKind && (statusKind === "error" || statusKind === "success")) {
       addToast({

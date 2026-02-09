@@ -1,7 +1,7 @@
 class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe() { }
+  unobserve() { }
+  disconnect() { }
 }
 global.ResizeObserver = ResizeObserver;
 import React from 'react';
@@ -15,7 +15,7 @@ import { useNotification } from "../content/component/NotificationManager";
 
 jest.mock("@carbon/react", () => ({
   ...jest.requireActual("@carbon/react"),
-  Loading: jest.fn(() => null), 
+  Loading: jest.fn(() => null),
 }));
 jest.mock("../content/api/api", () => ({
   getHuggingRunLists: jest.fn(),
@@ -28,13 +28,11 @@ jest.mock('react-i18next', () => ({
     t: key => key
   })
 }));
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
 describe('HuggingFace Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
   });
   it('renders loading state', async () => {
     useNotification.mockReturnValue(jest.fn());

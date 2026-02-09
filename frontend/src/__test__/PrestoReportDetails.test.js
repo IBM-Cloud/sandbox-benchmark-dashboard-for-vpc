@@ -24,13 +24,10 @@ jest.mock('@carbon/charts-react', () => ({
 }));
 jest.mock('../content/component/toast', () => (props) => <div data-testid="notification" {...props}></div>);
 
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
-
 describe('Presto  Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
   });
   it('renders without crashing', () => {
     useNotification.mockReturnValue(jest.fn());

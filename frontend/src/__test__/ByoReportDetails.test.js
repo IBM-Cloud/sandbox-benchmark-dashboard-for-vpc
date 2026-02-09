@@ -1,10 +1,3 @@
-class ResizeObserver {
-  observe() { }
-  unobserve() { }
-  disconnect() { }
-}
-global.ResizeObserver = ResizeObserver;
-
 import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -21,16 +14,14 @@ jest.mock('../content/api/api', () => ({
   getByo: jest.fn(),
 }));
 
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
+// Redundant useNotification mock removed
 
 describe('ByoReport Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    useNotification.mockReturnValue(jest.fn());
     getByo.mockResolvedValue(mockGetByoInstanceResponse);
     getByoLists.mockResolvedValue(mockGetByoRunBenchmarkResponse);
-    useNotification.mockReturnValue(jest.fn());
   });
   afterEach(() => {
     jest.clearAllMocks();

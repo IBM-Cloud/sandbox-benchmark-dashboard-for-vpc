@@ -34,9 +34,7 @@ jest.mock('@carbon/ibm-products', () => ({
   )),
 }));
 
-jest.mock('../content/component/NotificationManager', () => ({
-  useNotification: jest.fn(),
-}));
+// Redundant useNotification mock removed
 
 describe("LandingPage", () => {
   beforeEach(() => {
@@ -71,7 +69,7 @@ describe("LandingPage", () => {
   });
 
   test("handles successful API response", async () => {
-    showNotificationStatus = jest.fn();
+    const showNotificationStatus = jest.fn();
     api.getMetadata.mockResolvedValueOnce(mockMetaData);
     render(<LandingPage />);
     await waitFor(() => {
