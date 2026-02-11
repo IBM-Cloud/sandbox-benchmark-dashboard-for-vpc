@@ -73,11 +73,7 @@
     "lodash-es": "^4.17.23",
     "webpack-dev-server": "^5.2.2",
     "workbox-build": "^7.0.0",
-    "eslint": "9.30.0",
-    "jsonpath": {
-      "static-eval": "^2.1.1",
-      "underscore": "^1.13.6"
-    }
+    "eslint": "9.30.0"
   },
   "resolutions": {
     "path-to-regexp": "^1.8.0",
