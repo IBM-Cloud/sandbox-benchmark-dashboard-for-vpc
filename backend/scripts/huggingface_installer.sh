@@ -1,6 +1,8 @@
 #!/bin/bash
 sudo apt-get update -y
 
+sudo apt-get install python3.10-venv -y
+
 # Installing nmon and ksh to get the performance metrics via nmon while running the application.
 sudo apt install nmon ksh -y
 
@@ -10,15 +12,16 @@ sudo DEBIAN_FRONTEND=noninteractive apt install libgoogle-perftools-dev -y
 export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libtcmalloc.so"
 
 sudo DEBIAN_FRONTEND=noninteractive apt-get install python3-pip -y
-pip install pip --upgrade
+pip install --upgrade pip
 export PATH=/home/ubuntu/.local/bin:$PATH
-pip install virtualenv
-virtualenv /home/ubuntu/inference_env
+python3 -m venv /home/ubuntu/inference_env
 . /home/ubuntu/inference_env/bin/activate
 
+pip install setuptools==69.5.0 wheel
+
 # Installing Pytorch and transformers
-pip3 install torch==2.3.1 -f https://download.pytorch.org/whl/cpu 
-pip3 install intel_extension_for_pytorch==2.3.0 -f https://developer.intel.com/ipex-whl-stable-cpu
+pip install torch==2.3.1 --index-url https://download.pytorch.org/whl/cpu
+pip install intel_extension_for_pytorch==2.3.0 -f https://developer.intel.com/ipex-whl-stable-cpu
 
 # Creating & locking requirements.txt for pip3 versions
 cat <<'EOF' > requirements.txt
@@ -77,6 +80,7 @@ for model in models:
     print(f"{model} Transformers pipeline short_sentence_array {result}")
 
 EOF
+chmod 644 /home/ubuntu/hf_benchmark.py
 fi
 
 lscpu | grep SapphireRapids
@@ -157,7 +161,7 @@ for model in models:
         print(f"{model} Optimum pipeline short_sentence_array {result}")
 
 EOF
-
+chmod 644 /home/ubuntu/hf_benchmark.py
 fi
 
 # Generate huggingface runner script
