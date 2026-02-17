@@ -51,6 +51,9 @@ body {
   justify-content: flex-end;
   width: auto;
 }
+.charts-common-cont .cds--cc--axes g.axis .axis-title {
+  text-anchor: middle !important;
+}
 
 // body{
 //   background-color: var(--cds-text-primary, #161616);

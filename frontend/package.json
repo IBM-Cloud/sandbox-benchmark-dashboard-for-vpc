@@ -73,7 +73,8 @@
     "lodash-es": "^4.17.23",
     "webpack-dev-server": "^5.2.2",
     "workbox-build": "^7.0.0",
-    "eslint": "9.30.0"
+    "eslint": "^9.30.0",
+    "qs": "^6.14.2"
   },
   "resolutions": {
     "path-to-regexp": "^1.8.0",
@@ -83,7 +84,7 @@
     "@babel/preset-env": "^7.24.3",
     "@babel/preset-react": "^7.24.1",
     "@testing-library/react": "^14.2.2",
-    "ajv": "^8.17.1",
+    "ajv": "^8.18.0",
     "babel-jest": "^27.5.1",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.5.1",
