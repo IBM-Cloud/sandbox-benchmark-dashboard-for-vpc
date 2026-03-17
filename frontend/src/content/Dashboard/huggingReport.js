@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import AiAmxComparedReport from "./HuggingDashboard/comparisonReport";
 import AiAmxCPUReport from "./HuggingDashboard/CpuReport";
 import {
@@ -58,29 +58,36 @@ const AiAmxReport = () => {
   };
 
 
-  const getBx2Value = vsiProfile => {
-    const bxVal = aiAmxReports && aiAmxReports.ListTest !== undefined && aiAmxReports.ListTest.find(f => f.vsiProfile === vsiProfile);
-    return bxVal ? bxVal.bertModelType.shortSentenceArray : null;
-  };
-  const bx2Values = (getBx2Value('bx2d-8x32') || getBx2Value('bx2d-16x64'));
+  const findByProfile = (listTest, vsiProfile) =>
+    listTest && listTest.find(f => f.vsiProfile === vsiProfile);
 
-  const getBx3Value = vsiProfile => {
-    const bxVal = aiAmxReports && aiAmxReports.ListTest !== undefined && aiAmxReports.ListTest.find(f => f.vsiProfile === vsiProfile);
-    return bxVal ? bxVal.bertModelType.shortSentenceArray : null;
-  };
-  const bx3Values = (getBx3Value('bx3d-8x40') || getBx3Value('bx3d-16x80'));
+  const bx2Values = useMemo(() => {
+    const list = aiAmxReports.ListTest;
+    if (!list) return null;
+    const entry = findByProfile(list, 'bx2d-8x32') || findByProfile(list, 'bx2d-16x64');
+    return entry ? entry.bertModelType.shortSentenceArray : null;
+  }, [aiAmxReports]);
 
-  const getBx2RValue = vsiProfile => {
-    const bxVal = aiAmxReports && aiAmxReports.ListTest !== undefined && aiAmxReports.ListTest.find(f => f.vsiProfile === vsiProfile);
-    return bxVal ? bxVal.robertaModelType.shortSentenceArray : null;
-  };
-  const bx2RValues = (getBx2RValue('bx2d-8x32') || getBx2RValue('bx2d-16x64'));
+  const bx3Values = useMemo(() => {
+    const list = aiAmxReports.ListTest;
+    if (!list) return null;
+    const entry = findByProfile(list, 'bx3d-8x40') || findByProfile(list, 'bx3d-16x80');
+    return entry ? entry.bertModelType.shortSentenceArray : null;
+  }, [aiAmxReports]);
 
-  const getBx3RValue = vsiProfile => {
-    const bxVal = aiAmxReports && aiAmxReports.ListTest !== undefined && aiAmxReports.ListTest.find(f => f.vsiProfile === vsiProfile);
-    return bxVal ? bxVal.robertaModelType.shortSentenceArray : null;
-  };
-  const bx3RValues = (getBx3RValue('bx3d-8x40') || getBx3RValue('bx3d-16x80'));
+  const bx2RValues = useMemo(() => {
+    const list = aiAmxReports.ListTest;
+    if (!list) return null;
+    const entry = findByProfile(list, 'bx2d-8x32') || findByProfile(list, 'bx2d-16x64');
+    return entry ? entry.robertaModelType.shortSentenceArray : null;
+  }, [aiAmxReports]);
+
+  const bx3RValues = useMemo(() => {
+    const list = aiAmxReports.ListTest;
+    if (!list) return null;
+    const entry = findByProfile(list, 'bx3d-8x40') || findByProfile(list, 'bx3d-16x80');
+    return entry ? entry.robertaModelType.shortSentenceArray : null;
+  }, [aiAmxReports]);
 
   const headers = [
     t('vsiName'),

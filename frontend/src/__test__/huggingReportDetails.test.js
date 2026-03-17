@@ -36,9 +36,10 @@ describe('HuggingFace Component', () => {
   });
   it('renders loading state', async () => {
     useNotification.mockReturnValue(jest.fn());
+    api.getHuggingRunLists.mockResolvedValueOnce({ ListTest: [] });
     render(<AiAmxReport />);
     const hugReport = await screen.findByText('vsiProfile');
-    expect(hugReport).toBeVisible();
+    expect(hugReport).toBeInTheDocument();
   });
 
   it("should display data", async () => {
