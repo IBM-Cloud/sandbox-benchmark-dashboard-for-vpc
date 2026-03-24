@@ -83,7 +83,7 @@
     "schema-utils": "^4.3.3",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "@tootallnate/once": "^3.0.1",
-    "flatted": "^3.4.0"
+    "flatted": "^3.4.2"
   },
   "resolutions": {
     "path-to-regexp": "^1.8.0",
