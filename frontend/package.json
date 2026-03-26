@@ -83,7 +83,8 @@
     "schema-utils": "^4.3.3",
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "@tootallnate/once": "^3.0.1",
-    "flatted": "^3.4.2"
+    "flatted": "^3.4.2",
+    "picomatch": "^4.0.4"
   },
   "resolutions": {
     "path-to-regexp": "^1.8.0",
@@ -92,7 +93,8 @@
     "ajv-keywords": "^5.1.0",
     "babel-loader": "^9.2.1",
     "schema-utils": "^4.3.3",
-    "fork-ts-checker-webpack-plugin": "^9.1.0"
+    "fork-ts-checker-webpack-plugin": "^9.1.0",
+    "picomatch": "^4.0.4"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.3",
