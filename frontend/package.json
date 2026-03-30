@@ -84,10 +84,13 @@
     "fork-ts-checker-webpack-plugin": "^9.1.0",
     "@tootallnate/once": "^3.0.1",
     "flatted": "^3.4.2",
-    "picomatch": "^4.0.4"
+    "picomatch": "^4.0.4",
+    "path-to-regexp": "0.1.13",
+    "yaml": "^2.2.2"
   },
   "resolutions": {
-    "path-to-regexp": "^1.8.0",
+    "path-to-regexp": "0.1.13",
+    "yaml": "^2.2.2",
     "@babel/runtime": "^7.26.10",
     "ajv": "^8.18.0",
     "ajv-keywords": "^5.1.0",
@@ -109,6 +112,9 @@
   "jest": {
     "moduleNameMapper": {
       "^@carbon/charts-react/styles.css$": "identity-obj-proxy"
-    }
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios)/)"
+    ]
   }
 }
